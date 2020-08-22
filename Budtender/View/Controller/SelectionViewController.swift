@@ -16,8 +16,6 @@ class SelectionViewController: UIViewController {
     private let starterText = UILabel()
     private let getStartedBtn = UIButton()
     private var tags = [Tag]()
-    
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,30 +52,22 @@ class SelectionViewController: UIViewController {
     private func parse(_ json: Data) {
         let decoder = JSONDecoder()
         
+        /// Use GCD later
         if let jsonTags = try? decoder.decode(WeedData.self, from: json) {
-            
             var weedData = jsonTags.data
             tags = weedData.menu_items
         }
         
-//        for tag in tags {
-//            //print(tag.tags)
-//            if let arr = tag.tags {
-//                for elm in arr {
-//                    print(elm.name)
-//                }
-//            }
-//
-//        }
-        
-//        let file: FileHandle? = FileHandle(forWritingAtPath: "/Users/enriqueflorencio/Documents/words.txt")
-//        if(file == nil) {
-//            print("FAILURE")
-//        } else {
-//            let data = ("HEMSWORTH" as NSString).data(using: String.Encoding.utf8.rawValue)
-//            file?.write(data!)
-//            file?.closeFile()
-//        }
+        for tag in tags {
+            
+            print(tag.name)
+            if let arr = tag.tags {
+                for elm in arr {
+                    print(elm.name)
+                }
+            }
+
+        }
         
     }
     
@@ -138,12 +128,14 @@ class SelectionViewController: UIViewController {
         sender.pulsate()
 //        let quizViewController = QuizViewController()
 //        navigationController?.pushViewController(quizViewController, animated: true)
+        let resultViewController = ResultViewController()
+        navigationController?.pushViewController(resultViewController, animated: true)
     }
 
 }
 
 extension UIButton {
-    func pulsate() {
+    public func pulsate() {
         let pulse = CASpringAnimation(keyPath: "transform.scale")
         pulse.duration = 0.2
         pulse.fromValue = 0.97

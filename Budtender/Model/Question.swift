@@ -10,6 +10,5 @@ import Foundation
 
 struct Question {
     public let questionText: String
-    public let options: [Bool]
     public var isAnswered: Bool
 }
