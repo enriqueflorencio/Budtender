@@ -10,14 +10,14 @@ import UIKit
 import Lottie
 import SnapKit
 
-class SelectionViewController: UIViewController {
+public class SelectionViewController: UIViewController {
     
     private let animationView = AnimationView()
     private let starterText = UILabel()
     private let getStartedBtn = UIButton()
     private var tags = [Tag]()
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         ///Fetch JSON from api
@@ -128,8 +128,10 @@ class SelectionViewController: UIViewController {
         sender.pulsate()
 //        let quizViewController = QuizViewController()
 //        navigationController?.pushViewController(quizViewController, animated: true)
-        let resultViewController = ResultViewController()
-        navigationController?.pushViewController(resultViewController, animated: true)
+//        let resultViewController = ResultViewController()
+//        navigationController?.pushViewController(resultViewController, animated: true)
+        let dispensaryViewController = DispensaryLocationViewController(strain: "OG Kush", dispensary: "Happy Leaf LA", tags: ["Happy", "Relaxed"], address: "2131 Westwood Blvd, Los Angeles, CA 90025")
+        navigationController?.pushViewController(dispensaryViewController, animated: true)
     }
 
 }

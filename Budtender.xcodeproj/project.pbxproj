@@ -15,6 +15,7 @@
 		CF3192BE24E5E0640082F9FA /* SelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF3192BD24E5E0640082F9FA /* SelectionViewController.swift */; };
 		CF866A6F24F0965B00C7C223 /* ResultCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A6E24F0965B00C7C223 /* ResultCollectionViewCell.swift */; };
 		CF866A7124F09AC000C7C223 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A7024F09AC000C7C223 /* ResultViewController.swift */; };
+		CF866A7324F3199C00C7C223 /* DispensaryLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A7224F3199C00C7C223 /* DispensaryLocationViewController.swift */; };
 		CF942ED224E75DD8001E16D4 /* QuizViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF942ED124E75DD8001E16D4 /* QuizViewController.swift */; };
 		CF942EDC24E77D08001E16D4 /* WeedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF942EDB24E77D08001E16D4 /* WeedData.swift */; };
 		CF942EDE24EC819A001E16D4 /* words.txt in Resources */ = {isa = PBXBuildFile; fileRef = CF942EDD24EC819A001E16D4 /* words.txt */; };
@@ -35,6 +36,7 @@
 		CF3192BD24E5E0640082F9FA /* SelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionViewController.swift; sourceTree = "<group>"; };
 		CF866A6E24F0965B00C7C223 /* ResultCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCollectionViewCell.swift; sourceTree = "<group>"; };
 		CF866A7024F09AC000C7C223 /* ResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
+		CF866A7224F3199C00C7C223 /* DispensaryLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispensaryLocationViewController.swift; sourceTree = "<group>"; };
 		CF942ED124E75DD8001E16D4 /* QuizViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewController.swift; sourceTree = "<group>"; };
 		CF942EDB24E77D08001E16D4 /* WeedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeedData.swift; sourceTree = "<group>"; };
 		CF942EDD24EC819A001E16D4 /* words.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = words.txt; path = ../../words.txt; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				CF3192BD24E5E0640082F9FA /* SelectionViewController.swift */,
 				CF942ED124E75DD8001E16D4 /* QuizViewController.swift */,
 				CF866A7024F09AC000C7C223 /* ResultViewController.swift */,
+				CF866A7224F3199C00C7C223 /* DispensaryLocationViewController.swift */,
 				CF942EE424ECBD79001E16D4 /* map.json */,
 			);
 			path = Controller;
@@ -261,6 +264,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF2C50D324E5D1C400A41AEE /* AppDelegate.swift in Sources */,
+				CF866A7324F3199C00C7C223 /* DispensaryLocationViewController.swift in Sources */,
 				CF3192BE24E5E0640082F9FA /* SelectionViewController.swift in Sources */,
 				CF2C50D524E5D1C400A41AEE /* SceneDelegate.swift in Sources */,
 				CF942EE024ECA02E001E16D4 /* Question.swift in Sources */,

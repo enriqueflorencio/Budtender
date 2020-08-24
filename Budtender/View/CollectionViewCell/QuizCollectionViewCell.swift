@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class QuizCollectionViewCell: UICollectionViewCell {
+public class QuizCollectionViewCell: UICollectionViewCell {
     private var trueButton = UIButton()
     private var falseButton = UIButton()
     private let labelQuestion = UILabel()
@@ -50,7 +50,7 @@ class QuizCollectionViewCell: UICollectionViewCell {
         sender.pulsate()
     }
     
-    override func prepareForReuse() {
+    public override func prepareForReuse() {
         trueButton.backgroundColor = UIColor.white
         falseButton.backgroundColor = UIColor.white
     }

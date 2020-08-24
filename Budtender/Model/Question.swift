@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Question {
+public struct Question {
     public let questionText: String
     public var isAnswered: Bool
 }

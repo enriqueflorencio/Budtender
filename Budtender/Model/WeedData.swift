@@ -8,19 +8,19 @@
 
 import Foundation
 
-struct WeedData: Codable {
+public struct WeedData: Codable {
     public var data: Weed
 }
 
-struct Weed: Codable {
+public struct Weed: Codable {
     public var menu_items: [Tag]
 }
 
-struct Tag: Codable {
+public struct Tag: Codable {
     public var name: String
     public var tags: [BudCategory]?
 }
 
-struct BudCategory: Codable {
+public struct BudCategory: Codable {
     public var name: String
 }
