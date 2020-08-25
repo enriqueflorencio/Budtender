@@ -16,9 +16,9 @@
 		CF866A6F24F0965B00C7C223 /* ResultCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A6E24F0965B00C7C223 /* ResultCollectionViewCell.swift */; };
 		CF866A7124F09AC000C7C223 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A7024F09AC000C7C223 /* ResultViewController.swift */; };
 		CF866A7324F3199C00C7C223 /* DispensaryLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A7224F3199C00C7C223 /* DispensaryLocationViewController.swift */; };
+		CF866A7624F480E500C7C223 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A7524F480E500C7C223 /* LocationService.swift */; };
 		CF942ED224E75DD8001E16D4 /* QuizViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF942ED124E75DD8001E16D4 /* QuizViewController.swift */; };
 		CF942EDC24E77D08001E16D4 /* WeedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF942EDB24E77D08001E16D4 /* WeedData.swift */; };
-		CF942EDE24EC819A001E16D4 /* words.txt in Resources */ = {isa = PBXBuildFile; fileRef = CF942EDD24EC819A001E16D4 /* words.txt */; };
 		CF942EE024ECA02E001E16D4 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF942EDF24ECA02E001E16D4 /* Question.swift */; };
 		CF942EE324ECBA80001E16D4 /* QuizCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF942EE224ECBA80001E16D4 /* QuizCollectionViewCell.swift */; };
 		CF942EE524ECBD79001E16D4 /* map.json in Resources */ = {isa = PBXBuildFile; fileRef = CF942EE424ECBD79001E16D4 /* map.json */; };
@@ -37,9 +37,9 @@
 		CF866A6E24F0965B00C7C223 /* ResultCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCollectionViewCell.swift; sourceTree = "<group>"; };
 		CF866A7024F09AC000C7C223 /* ResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
 		CF866A7224F3199C00C7C223 /* DispensaryLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispensaryLocationViewController.swift; sourceTree = "<group>"; };
+		CF866A7524F480E500C7C223 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		CF942ED124E75DD8001E16D4 /* QuizViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewController.swift; sourceTree = "<group>"; };
 		CF942EDB24E77D08001E16D4 /* WeedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeedData.swift; sourceTree = "<group>"; };
-		CF942EDD24EC819A001E16D4 /* words.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = words.txt; path = ../../words.txt; sourceTree = "<group>"; };
 		CF942EDF24ECA02E001E16D4 /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		CF942EE224ECBA80001E16D4 /* QuizCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizCollectionViewCell.swift; sourceTree = "<group>"; };
 		CF942EE424ECBD79001E16D4 /* map.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = map.json; path = ../../../../../Downloads/map.json; sourceTree = "<group>"; };
@@ -96,13 +96,13 @@
 		CF2C50D124E5D1C400A41AEE /* Budtender */ = {
 			isa = PBXGroup;
 			children = (
+				CF866A7424F480CE00C7C223 /* Manager */,
 				CF2C50E624E5D1E400A41AEE /* Model */,
 				CF2C50E824E5D1FB00A41AEE /* View */,
 				CF2C50D224E5D1C400A41AEE /* AppDelegate.swift */,
 				CF2C50D424E5D1C400A41AEE /* SceneDelegate.swift */,
 				CF2C50DB24E5D1C700A41AEE /* Assets.xcassets */,
 				CF2C50DD24E5D1C700A41AEE /* LaunchScreen.storyboard */,
-				CF942EDD24EC819A001E16D4 /* words.txt */,
 				CF2C50E024E5D1C700A41AEE /* Info.plist */,
 			);
 			path = Budtender;
@@ -136,6 +136,14 @@
 				CF2C50E724E5D1F800A41AEE /* Controller */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		CF866A7424F480CE00C7C223 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				CF866A7524F480E500C7C223 /* LocationService.swift */,
+			);
+			path = Manager;
 			sourceTree = "<group>";
 		};
 		CF942EE124ECBA26001E16D4 /* CollectionViewCell */ = {
@@ -210,7 +218,6 @@
 				CF2C50DF24E5D1C700A41AEE /* LaunchScreen.storyboard in Resources */,
 				CF2C50DC24E5D1C700A41AEE /* Assets.xcassets in Resources */,
 				CF942EE524ECBD79001E16D4 /* map.json in Resources */,
-				CF942EDE24EC819A001E16D4 /* words.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +273,7 @@
 				CF2C50D324E5D1C400A41AEE /* AppDelegate.swift in Sources */,
 				CF866A7324F3199C00C7C223 /* DispensaryLocationViewController.swift in Sources */,
 				CF3192BE24E5E0640082F9FA /* SelectionViewController.swift in Sources */,
+				CF866A7624F480E500C7C223 /* LocationService.swift in Sources */,
 				CF2C50D524E5D1C400A41AEE /* SceneDelegate.swift in Sources */,
 				CF942EE024ECA02E001E16D4 /* Question.swift in Sources */,
 				CF942EDC24E77D08001E16D4 /* WeedData.swift in Sources */,
@@ -412,6 +420,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2E24SPH2ZV;
 				INFOPLIST_FILE = Budtender/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -431,6 +440,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2E24SPH2ZV;
 				INFOPLIST_FILE = Budtender/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

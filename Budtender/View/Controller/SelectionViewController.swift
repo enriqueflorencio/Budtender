@@ -9,12 +9,14 @@
 import UIKit
 import Lottie
 import SnapKit
+import CoreLocation
 
 public class SelectionViewController: UIViewController {
     
     private let animationView = AnimationView()
     private let starterText = UILabel()
     private let getStartedBtn = UIButton()
+    private var locationService: LocationService?
     private var tags = [Tag]()
 
     public override func viewDidLoad() {
@@ -37,6 +39,7 @@ public class SelectionViewController: UIViewController {
         ///Configure the layout
         configureLayout()
         setupAnimation()
+        checkLocationServices()
     }
     
     private func fetchJSON(_ dispensaryString: String) {
@@ -69,6 +72,16 @@ public class SelectionViewController: UIViewController {
 
         }
         
+    }
+    
+    private func checkLocationServices() {
+        let locationManager = CLLocationManager()
+        locationService = LocationService(locationManager: locationManager)
+        locationService?.setupLocationServices()
+        locationService?.changeString("hello")
+        if(CLLocationManager.locationServicesEnabled()) {
+            locationService?.checkLocationAuthorization()
+        }
     }
     
     private func configureLayout() {

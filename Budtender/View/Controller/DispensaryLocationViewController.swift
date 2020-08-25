@@ -30,6 +30,7 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
     private let dispensaryLabel = UILabel()
     private var tagsLabel = UILabel()
     private let mapView = MKMapView()
+    private var locationService: LocationService?
     
     
     
@@ -48,7 +49,6 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
     private func configureViews() {
         title = strain
         view.backgroundColor = UIColor.white
-        
         
     }
     
