@@ -28,6 +28,16 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
     }
     
     private var resultCollectionView: UICollectionView!
+    private var locationService: LocationService?
+    
+    init(locationService: LocationService?) {
+        self.locationService = locationService
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
 
     public override func viewDidLoad() {

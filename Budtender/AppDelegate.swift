@@ -17,6 +17,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        
+        /// Create the storyboard programmatically
+        window = UIWindow(frame: UIScreen.main.bounds)
+        /// Create the navigation controller and assign the root view controller to the selection screen
+        let navigationController = UINavigationController(rootViewController: SelectionViewController())
+        window?.rootViewController = navigationController
+        window?.makeKeyAndVisible()
+        
+        
         print("APP DELEGATE")
         
         return true

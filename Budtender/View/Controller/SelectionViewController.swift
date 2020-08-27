@@ -11,7 +11,16 @@ import Lottie
 import SnapKit
 import CoreLocation
 
-public class SelectionViewController: UIViewController {
+public class SelectionViewController: UIViewController, LocationServiceDelegate {
+    public func zoomToLatestLocation(coordinate: CLLocationCoordinate2D) {
+        
+    }
+    
+    public func notifyStatus(status: CLAuthorizationStatus) {
+        if(status == .denied) {
+            presentAlertController()
+        }
+    }
     
     private let animationView = AnimationView()
     private let starterText = UILabel()
@@ -76,12 +85,10 @@ public class SelectionViewController: UIViewController {
     
     private func checkLocationServices() {
         let locationManager = CLLocationManager()
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationService = LocationService(locationManager: locationManager)
         locationService?.setupLocationServices()
-        locationService?.changeString("hello")
-        if(CLLocationManager.locationServicesEnabled()) {
-            locationService?.checkLocationAuthorization()
-        }
+        locationService?.delegate = self
     }
     
     private func configureLayout() {
@@ -138,13 +145,19 @@ public class SelectionViewController: UIViewController {
     }
     
     @objc func takeQuiz(sender: UIButton!) {
+        locationService?.delegate = nil
         sender.pulsate()
-//        let quizViewController = QuizViewController()
-//        navigationController?.pushViewController(quizViewController, animated: true)
-//        let resultViewController = ResultViewController()
-//        navigationController?.pushViewController(resultViewController, animated: true)
-        let dispensaryViewController = DispensaryLocationViewController(strain: "OG Kush", dispensary: "Happy Leaf LA", tags: ["Happy", "Relaxed"], address: "2131 Westwood Blvd, Los Angeles, CA 90025")
-        navigationController?.pushViewController(dispensaryViewController, animated: true)
+        let quizViewController = QuizViewController(locationService: locationService)
+        navigationController?.pushViewController(quizViewController, animated: true)
+
+//        let dispensaryViewController = DispensaryLocationViewController(locationService: locationService , strain: "OG Kush", dispensary: "Happy Leaf LA", tags: ["Happy", "Relaxed"], address: "2131 Westwood Blvd, Los Angeles, CA 90025")
+//        navigationController?.pushViewController(dispensaryViewController, animated: true)
+    }
+    
+    public func presentAlertController() {
+        let ac = UIAlertController(title: "WARNING:", message: "Budtender neeeds access to your location in order to deliver a satisfying experience. Please change your settings to grant us access to your location.", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .cancel))
+        present(ac, animated: true)
     }
 
 }

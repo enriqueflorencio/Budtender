@@ -22,12 +22,21 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
         return cell
     }
     
-    
     private var quizCollectionView: UICollectionView!
     private let previousButton = UIButton()
     private let nextButton = UIButton()
     private var questionsArray = [Question]()
     private var currentQuestionNumber = 1
+    private var locationService: LocationService?
+    
+    init(locationService: LocationService?) {
+        self.locationService = locationService
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     
     public override func viewDidLoad() {
@@ -46,6 +55,13 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
     
     @objc func nextAction(_ sender: UIButton) {
         sender.pulsate()
+        
+        if(currentQuestionNumber == questionsArray.count) {
+            let resultViewController = ResultViewController(locationService: locationService)
+            navigationController?.pushViewController(resultViewController, animated: true)
+            
+            return
+        }
         var contentOffset = CGFloat(floor(self.quizCollectionView.contentOffset.x + self.quizCollectionView.bounds.size.width))
         self.moveToFrame(contentOffset)
     }

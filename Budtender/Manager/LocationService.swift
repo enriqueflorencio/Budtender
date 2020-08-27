@@ -9,9 +9,20 @@
 import Foundation
 import MapKit
 
+public protocol LocationServiceDelegate {
+    func notifyStatus(status: CLAuthorizationStatus)
+    func zoomToLatestLocation(coordinate: CLLocationCoordinate2D)
+}
+
 public class LocationService: NSObject, CLLocationManagerDelegate {
     
-    private let locationManager: CLLocationManager
+    public let locationManager: CLLocationManager
+    
+    public var delegate: LocationServiceDelegate?
+    
+    public var status: CLAuthorizationStatus?
+    
+    private var currentCoordinate: CLLocationCoordinate2D?
     
     public init(locationManager: CLLocationManager) {
         self.locationManager = locationManager
@@ -23,6 +34,10 @@ public class LocationService: NSObject, CLLocationManagerDelegate {
         locationManager.requestWhenInUseAuthorization()
         //checkLocationAuthorization()
         
+    }
+    
+    public func getStatus() -> CLAuthorizationStatus? {
+        return self.status
     }
     
     public func checkLocationAuthorization() {
@@ -43,7 +58,21 @@ public class LocationService: NSObject, CLLocationManagerDelegate {
     }
     
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        print("CHANGED")
+        self.status = status
+        delegate?.notifyStatus(status: status)
+    }
+    
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        print("UPDATED LOCATION")
+        guard let latestLocation = locations.first else {
+            return
+        }
+        
+        if(currentCoordinate == nil) {
+            delegate?.zoomToLatestLocation(coordinate: latestLocation.coordinate)
+        }
+        
+        currentCoordinate = latestLocation.coordinate
     }
     
 }

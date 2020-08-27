@@ -8,16 +8,29 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 import SnapKit
 
-public class DispensaryLocationViewController: UIViewController, MKMapViewDelegate {
+public class DispensaryLocationViewController: UIViewController, MKMapViewDelegate, LocationServiceDelegate {
+    public func notifyStatus(status: CLAuthorizationStatus) {
+        
+    }
+    
+    public func zoomToLatestLocation(coordinate: CLLocationCoordinate2D) {
+        print("HIT")
+        let zoomRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 10000, longitudinalMeters: 10000)
+        mapView.setRegion(zoomRegion, animated: true)
+    }
+    
     
     private let strain: String
+    private var locationService: LocationService?
     private let dispensary: String
     private let tags: [String]
     private let address: String
     
-    public init(strain: String, dispensary: String, tags: [String], address: String) {
+    public init(locationService: LocationService?, strain: String, dispensary: String, tags: [String], address: String) {
+        self.locationService = locationService
         self.strain = strain
         self.dispensary = dispensary
         self.tags = tags
@@ -30,7 +43,6 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
     private let dispensaryLabel = UILabel()
     private var tagsLabel = UILabel()
     private let mapView = MKMapView()
-    private var locationService: LocationService?
     
     
     
@@ -46,9 +58,16 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         configureMapView()
     }
     
+    /// The view isn't going back to normal. FIX THIS
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureMapView()
+    }
+    
     private func configureViews() {
         title = strain
         view.backgroundColor = UIColor.white
+        locationService?.delegate = self
         
     }
     
@@ -128,10 +147,19 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         }
     }
     
+    private func beginUpdatingLocation() {
+        mapView.showsUserLocation = true
+        locationService?.locationManager.startUpdatingLocation()
+    }
+    
     private func configureMapView() {
+        
         mapView.mapType = MKMapType.standard
         mapView.isZoomEnabled = true
         mapView.isScrollEnabled = true
+        if(locationService?.status == .authorizedAlways || locationService?.status == .authorizedWhenInUse) {
+            beginUpdatingLocation()
+        }
         view.addSubview(mapView)
         mapView.snp.makeConstraints { (make) in
             make.width.equalTo(340)
