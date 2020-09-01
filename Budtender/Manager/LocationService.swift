@@ -9,7 +9,7 @@
 import Foundation
 import MapKit
 
-public protocol LocationServiceDelegate {
+public protocol LocationServiceDelegate: class {
     func notifyStatus(status: CLAuthorizationStatus)
     func zoomToLatestLocation(coordinate: CLLocationCoordinate2D)
 }
@@ -18,7 +18,9 @@ public class LocationService: NSObject, CLLocationManagerDelegate {
     
     public let locationManager: CLLocationManager
     
-    public var delegate: LocationServiceDelegate?
+    private var radius: Double = 3598.6025823771
+    
+    weak public var delegate: LocationServiceDelegate?
     
     public var status: CLAuthorizationStatus?
     
@@ -57,6 +59,20 @@ public class LocationService: NSObject, CLLocationManagerDelegate {
         }
     }
     
+    public func makeBoundingBox(coordinate: CLLocationCoordinate2D) {
+        var deltay = radius / (111111)
+        var deltax = radius / (111111 * cos(coordinate.latitude))
+        
+        var topCornerlat = deltax + coordinate.longitude
+        var topCornerlong = deltay + coordinate.latitude
+        var bottomCornerlat = coordinate.longitude - deltax
+        var bottomCornerlong = coordinate.latitude - deltay
+        
+        print("\(bottomCornerlong), \(bottomCornerlat), \(topCornerlong), \(topCornerlat)")
+        
+        
+    }
+    
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         self.status = status
         delegate?.notifyStatus(status: status)
@@ -73,6 +89,8 @@ public class LocationService: NSObject, CLLocationManagerDelegate {
         }
         
         currentCoordinate = latestLocation.coordinate
+        
+        makeBoundingBox(coordinate: latestLocation.coordinate)
     }
     
 }

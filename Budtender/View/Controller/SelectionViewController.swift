@@ -26,13 +26,15 @@ public class SelectionViewController: UIViewController, LocationServiceDelegate 
     private let starterText = UILabel()
     private let getStartedBtn = UIButton()
     private var locationService: LocationService?
+    //private let nearestDispensaryURL = "https://api-g.weedmaps.com/discovery/v1/listings?filter[bounding_box]=\(),\(),\(),\()&filter[plural_types][]=doctors&filter[plural_types][]=dispensaries&filter[plural_types][]=deliveries&size=100"
     private var tags = [Tag]()
 
     public override func viewDidLoad() {
         super.viewDidLoad()
         
         ///Fetch JSON from api
-        fetchJSON("hazel")
+        //fetchJSON("blue-fire")
+//        fetchJSON("fire-leaf-dispensary-stockyard")
 //        fetchJSON("buddha-company-2")
 //        fetchJSON("bmc-2")
 //        fetchJSON("svc-home-of-the-louie-xiii")
@@ -72,10 +74,13 @@ public class SelectionViewController: UIViewController, LocationServiceDelegate 
         
         for tag in tags {
             
-            print(tag.name)
+            //print(tag.name)
             if let arr = tag.tags {
                 for elm in arr {
-                    print(elm.name)
+                    //print(elm.name)
+                    if(elm.name == "Euphoric") {
+                        print(tag.name)
+                    }
                 }
             }
 
@@ -162,17 +167,4 @@ public class SelectionViewController: UIViewController, LocationServiceDelegate 
 
 }
 
-extension UIButton {
-    public func pulsate() {
-        let pulse = CASpringAnimation(keyPath: "transform.scale")
-        pulse.duration = 0.2
-        pulse.fromValue = 0.97
-        pulse.toValue = 1.0
-        pulse.autoreverses = true
-        pulse.repeatCount = 2
-        pulse.initialVelocity = 0.5
-        pulse.damping = 1.0
-        
-        layer.add(pulse, forKey: nil)
-    }
-}
+

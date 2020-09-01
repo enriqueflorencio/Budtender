@@ -9,6 +9,10 @@
 import UIKit
 import SnapKit
 
+public protocol QuizCellDelegate: class {
+    func didChooseAnswer(buttonIndex: Int)
+}
+
 public class QuizCollectionViewCell: UICollectionViewCell {
     private var trueButton = UIButton()
     private var falseButton = UIButton()
@@ -21,10 +25,15 @@ public class QuizCollectionViewCell: UICollectionViewCell {
             labelQuestion.text = unwrappedQuestion.questionText
             trueButton.setTitle("Yes", for: .normal)
             falseButton.setTitle("No", for: .normal)
+            
+            if unwrappedQuestion.isAnswered {
+                buttonsArray[unwrappedQuestion.buttonTag!].backgroundColor = UIColor.yellow
+            }
         }
     }
     
     private var buttonsArray = [UIButton]()
+    public weak var delegate: QuizCellDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -48,6 +57,15 @@ public class QuizCollectionViewCell: UICollectionViewCell {
     
     @objc func buttonOptionAction(sender: UIButton) {
         sender.pulsate()
+        
+        guard let unwrappedQuestion = question else {
+            return
+        }
+        
+        if(!unwrappedQuestion.isAnswered) {
+            print(sender.tag)
+            delegate?.didChooseAnswer(buttonIndex: sender.tag)
+        }
     }
     
     public override func prepareForReuse() {
@@ -72,6 +90,7 @@ public class QuizCollectionViewCell: UICollectionViewCell {
             make.height.equalTo(50)
         }
         trueButton.addTarget(self, action: #selector(buttonOptionAction), for: .touchUpInside)
+        buttonsArray.append(trueButton)
         falseButton = getButton(1)
         addSubview(falseButton)
         falseButton.snp.makeConstraints { (make) in
@@ -81,6 +100,7 @@ public class QuizCollectionViewCell: UICollectionViewCell {
             make.height.equalTo(50)
         }
         falseButton.addTarget(self, action: #selector(buttonOptionAction), for: .touchUpInside)
+        buttonsArray.append(falseButton)
     }
     
     private func getButton(_ tag: Int) -> UIButton {

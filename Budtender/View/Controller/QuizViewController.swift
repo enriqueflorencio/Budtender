@@ -7,8 +7,35 @@
 //
 
 import UIKit
+import SnapKit
 
-public class QuizViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+public class QuizViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, QuizCellDelegate {
+    public func didChooseAnswer(buttonIndex: Int) {
+        let centerindex = getCenterIndex()
+        guard let index = centerindex else {
+            print("RETURNING")
+            return
+        }
+        
+        if(buttonIndex == 0) {
+            userTags.append(questionsArray[index.item].weedmapsTag)
+        }
+        
+        questionsArray[index.item].buttonTag = buttonIndex
+        print("INDEX: \(index.item)")
+        questionsArray[index.item].isAnswered = true
+        //currentQuestionNumber += 1
+        quizCollectionView.reloadItems(at: [index])
+        
+    }
+    
+    private func getCenterIndex() -> IndexPath? {
+        let center = self.view.convert(self.quizCollectionView.center, to: self.quizCollectionView)
+        let index = quizCollectionView.indexPathForItem(at: center)
+        print(index ?? "index not found")
+        return index
+    }
+    
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return questionsArray.count
     }
@@ -18,6 +45,7 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
             fatalError("Could not dequeue cell")
         }
         cell.question = questionsArray[indexPath.row]
+        cell.delegate = self
         
         return cell
     }
@@ -28,6 +56,7 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
     private var questionsArray = [Question]()
     private var currentQuestionNumber = 1
     private var locationService: LocationService?
+    private var userTags = [String]()
     
     init(locationService: LocationService?) {
         self.locationService = locationService
@@ -82,7 +111,6 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
         nextButton.setTitleColor(UIColor.white, for: .normal)
         nextButton.backgroundColor = UIColor.purple
         nextButton.addTarget(self, action: #selector(nextAction), for: .touchUpInside)
-        
     }
     
     private func configureView() {
@@ -112,9 +140,16 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
     }
     
     private func setupQuestions() {
-        let question1 = Question(questionText: "Do you feel stressed?", isAnswered: false)
-        let question2 = Question(questionText: "Are you tired?", isAnswered: false)
-        questionsArray = [question1, question2]
+        let question1 = Question(questionText: "Are you interested in feeling more energetic?", weedmapsTag: "Energetic", isAnswered: false, buttonTag: nil)
+        let question2 = Question(questionText: "Are you looking to be more creative?", weedmapsTag: "Creative", isAnswered: false, buttonTag: nil)
+        let question3 = Question(questionText: "Are you looking for something that will help uplift your mood?", weedmapsTag: "Uplifted", isAnswered: false, buttonTag: nil)
+        let question4 = Question(questionText: "Are you interested in being more talkative or open?", weedmapsTag: "Earthy", isAnswered: false, buttonTag: nil)
+        let question5 = Question(questionText: "Would you like to be more relaxed?", weedmapsTag: "Relaxed", isAnswered: false, buttonTag: nil)
+        let question6 = Question(questionText: "Do you desire to feel euphoric?", weedmapsTag: "Euphoric", isAnswered: false, buttonTag: nil)
+        let question7 = Question(questionText: "Are you looking for something that will help you have a good night's rest?", weedmapsTag: "Sleepy", isAnswered: false, buttonTag: nil)
+        let question8 = Question(questionText: "Would you like to be more giggly or amused?", weedmapsTag: "Giggly", isAnswered: false, buttonTag: nil)
+        
+        questionsArray = [question1, question2, question3, question4, question5, question6, question7, question8]
     }
     
     private func setupViews() {

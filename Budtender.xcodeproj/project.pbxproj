@@ -16,6 +16,8 @@
 		CF866A7124F09AC000C7C223 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A7024F09AC000C7C223 /* ResultViewController.swift */; };
 		CF866A7324F3199C00C7C223 /* DispensaryLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A7224F3199C00C7C223 /* DispensaryLocationViewController.swift */; };
 		CF866A7624F480E500C7C223 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A7524F480E500C7C223 /* LocationService.swift */; };
+		CF866A7A24FDA9D800C7C223 /* DispensaryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A7924FDA9D800C7C223 /* DispensaryData.swift */; };
+		CF866A8024FDC1EC00C7C223 /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A7F24FDC1EC00C7C223 /* UIButton+Extensions.swift */; };
 		CF942ED224E75DD8001E16D4 /* QuizViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF942ED124E75DD8001E16D4 /* QuizViewController.swift */; };
 		CF942EDC24E77D08001E16D4 /* WeedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF942EDB24E77D08001E16D4 /* WeedData.swift */; };
 		CF942EE024ECA02E001E16D4 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF942EDF24ECA02E001E16D4 /* Question.swift */; };
@@ -36,6 +38,8 @@
 		CF866A7024F09AC000C7C223 /* ResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
 		CF866A7224F3199C00C7C223 /* DispensaryLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispensaryLocationViewController.swift; sourceTree = "<group>"; };
 		CF866A7524F480E500C7C223 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		CF866A7924FDA9D800C7C223 /* DispensaryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispensaryData.swift; sourceTree = "<group>"; };
+		CF866A7F24FDC1EC00C7C223 /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
 		CF942ED124E75DD8001E16D4 /* QuizViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewController.swift; sourceTree = "<group>"; };
 		CF942EDB24E77D08001E16D4 /* WeedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeedData.swift; sourceTree = "<group>"; };
 		CF942EDF24ECA02E001E16D4 /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
@@ -94,6 +98,7 @@
 		CF2C50D124E5D1C400A41AEE /* Budtender */ = {
 			isa = PBXGroup;
 			children = (
+				CF866A7E24FDC1BE00C7C223 /* UIFoundation */,
 				CF866A7424F480CE00C7C223 /* Manager */,
 				CF2C50E624E5D1E400A41AEE /* Model */,
 				CF2C50E824E5D1FB00A41AEE /* View */,
@@ -109,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				CF942EDB24E77D08001E16D4 /* WeedData.swift */,
+				CF866A7924FDA9D800C7C223 /* DispensaryData.swift */,
 				CF942EDF24ECA02E001E16D4 /* Question.swift */,
 			);
 			path = Model;
@@ -141,6 +147,14 @@
 				CF866A7524F480E500C7C223 /* LocationService.swift */,
 			);
 			path = Manager;
+			sourceTree = "<group>";
+		};
+		CF866A7E24FDC1BE00C7C223 /* UIFoundation */ = {
+			isa = PBXGroup;
+			children = (
+				CF866A7F24FDC1EC00C7C223 /* UIButton+Extensions.swift */,
+			);
+			path = UIFoundation;
 			sourceTree = "<group>";
 		};
 		CF942EE124ECBA26001E16D4 /* CollectionViewCell */ = {
@@ -268,9 +282,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF2C50D324E5D1C400A41AEE /* AppDelegate.swift in Sources */,
+				CF866A8024FDC1EC00C7C223 /* UIButton+Extensions.swift in Sources */,
 				CF866A7324F3199C00C7C223 /* DispensaryLocationViewController.swift in Sources */,
 				CF3192BE24E5E0640082F9FA /* SelectionViewController.swift in Sources */,
 				CF866A7624F480E500C7C223 /* LocationService.swift in Sources */,
+				CF866A7A24FDA9D800C7C223 /* DispensaryData.swift in Sources */,
 				CF942EE024ECA02E001E16D4 /* Question.swift in Sources */,
 				CF942EDC24E77D08001E16D4 /* WeedData.swift in Sources */,
 				CF942EE324ECBA80001E16D4 /* QuizCollectionViewCell.swift in Sources */,

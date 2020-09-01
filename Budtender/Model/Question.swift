@@ -10,5 +10,7 @@ import Foundation
 
 public struct Question {
     public let questionText: String
+    public let weedmapsTag: String
     public var isAnswered: Bool
+    public var buttonTag: Int?
 }
