@@ -12,14 +12,29 @@ import CoreLocation
 import SnapKit
 
 public class DispensaryLocationViewController: UIViewController, MKMapViewDelegate, LocationServiceDelegate {
+    public func queryDispensaries() {
+        
+    }
+    
     public func notifyStatus(status: CLAuthorizationStatus) {
         
     }
     
     public func zoomToLatestLocation(coordinate: CLLocationCoordinate2D) {
-        print("HIT")
-        let zoomRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 10000, longitudinalMeters: 10000)
-        mapView.setRegion(zoomRegion, animated: true)
+        
+    }
+    
+    private func zoomIn() {
+        var zoomRect = MKMapRect.null;
+        var myx = MKMapPoint((locationService?.currentCoordinate)!)
+        var f = CLLocationCoordinate2D(latitude: dispensaryLatitude, longitude: dispensaryLongitude)
+        var disx = MKMapPoint(f)
+        var myLocationPointRect = MKMapRect(origin: myx, size: MKMapSize(width: 0.0, height: 0.0))
+        var currentDestinationPointRect = MKMapRect(origin: disx, size: MKMapSize(width: 0.0, height: 0.0))
+
+        zoomRect = currentDestinationPointRect
+        zoomRect = zoomRect.union(myLocationPointRect)
+        mapView.setVisibleMapRect(zoomRect, animated: true)
     }
     
     
@@ -28,13 +43,17 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
     private let dispensary: String
     private let tags: [String]
     private let address: String
+    private let dispensaryLatitude: Double
+    private let dispensaryLongitude: Double
     
-    public init(locationService: LocationService?, strain: String, dispensary: String, tags: [String], address: String) {
+    public init(locationService: LocationService?, strain: String, dispensary: String, tags: [String], address: String, dispensaryLatitude: Double, dispensaryLongitude: Double) {
         self.locationService = locationService
         self.strain = strain
         self.dispensary = dispensary
         self.tags = tags
         self.address = address
+        self.dispensaryLatitude = dispensaryLatitude
+        self.dispensaryLongitude = dispensaryLongitude
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -68,7 +87,35 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         title = strain
         view.backgroundColor = UIColor.white
         locationService?.delegate = self
+    }
+    
+    private func addDispensaryCoordinates() {
+        let dispensaryInformation = DispensaryMap(title: dispensary, coordinate: CLLocationCoordinate2D(latitude: dispensaryLatitude, longitude: dispensaryLongitude))
+        mapView.addAnnotation(dispensaryInformation)
+        direct()
+    }
+    
+    private func direct() {
+        let request = MKDirections.Request()
+        request.source = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: (locationService?.currentCoordinate!.latitude)!, longitude: (locationService?.currentCoordinate!.longitude)!), addressDictionary: nil))
+        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: dispensaryLatitude, longitude: dispensaryLongitude), addressDictionary: nil))
+        request.requestsAlternateRoutes = true
+        request.transportType = .automobile
         
+        let directions = MKDirections(request: request)
+        directions.calculate { [unowned self] (response, error) in
+            guard let unwrappedResponse = response else {
+                return
+            }
+            
+            let route = unwrappedResponse.routes[0] as MKRoute
+            let distance = route.distance / 1609
+            
+            if(self.dispensaryLabel.text?.last == " ") {
+                self.dispensaryLabel.text! += String(format: "%.1f miles", distance)
+            }
+            
+        }
     }
     
     private func configureImageView() {
@@ -89,9 +136,10 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
     }
     
     private func configureLabels() {
-        strainLabel.text = strain
+        strainLabel.text = "Product: \(strain)"
         strainLabel.layer.borderColor = UIColor(white: 0, alpha: 0.3).cgColor
         strainLabel.layer.borderWidth = 2
+        strainLabel.numberOfLines = 3
         strainLabel.layer.cornerRadius = 3
         strainLabel.layer.cornerRadius = 7
         strainLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
@@ -99,12 +147,12 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         view.addSubview(strainLabel)
         strainLabel.snp.makeConstraints { (make) in
             make.width.equalTo(200)
-            make.height.equalTo(45)
-            make.top.equalTo(strainView.snp.top).inset(35)
+            make.height.equalTo(70)
+            make.top.equalTo(strainView.snp.top).inset(27)
             make.left.equalTo(strainView.snp.right).offset(10)
             make.right.equalTo(view.snp.right).inset(10)
         }
-        tagsLabel.text = " Tags: "
+        tagsLabel.text = "Tags: "
         var cntr = 0
         for tag in tags {
             if(cntr == tags.capacity - 1) {
@@ -118,9 +166,10 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         tagsLabel.layer.borderColor = UIColor(white: 0, alpha: 0.3).cgColor
         tagsLabel.layer.borderWidth = 2
         tagsLabel.layer.cornerRadius = 3
+        tagsLabel.numberOfLines = 3
         tagsLabel.layer.cornerRadius = 7
         tagsLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
-        tagsLabel.textAlignment = .left
+        tagsLabel.textAlignment = .center
         view.addSubview(tagsLabel)
         tagsLabel.snp.makeConstraints { (make) in
             make.width.equalTo(300)
@@ -129,14 +178,16 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
             make.left.equalTo(view.snp.left).inset(10)
             make.right.equalTo(view.snp.right).inset(10)
         }
-        dispensaryLabel.text = " Dispensary: "
+        dispensaryLabel.text = "Dispensary Name: "
         dispensaryLabel.text! += dispensary
+        dispensaryLabel.text! += "\nDistance: "
         dispensaryLabel.layer.borderColor = UIColor(white: 0, alpha: 0.3).cgColor
         dispensaryLabel.layer.borderWidth = 2
         dispensaryLabel.layer.cornerRadius = 3
         dispensaryLabel.layer.cornerRadius = 7
+        dispensaryLabel.numberOfLines = 2
         dispensaryLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
-        dispensaryLabel.textAlignment = .left
+        dispensaryLabel.textAlignment = .center
         view.addSubview(dispensaryLabel)
         dispensaryLabel.snp.makeConstraints { (make) in
             make.width.equalTo(300)
@@ -163,12 +214,14 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         view.addSubview(mapView)
         mapView.snp.makeConstraints { (make) in
             make.width.equalTo(340)
-            make.height.equalTo(250)
+            make.height.equalTo(280)
             make.left.equalTo(view.snp.left).inset(10)
             make.right.equalTo(view.snp.right).inset(10)
             make.top.equalTo(dispensaryLabel.snp.bottom).offset(15)
             
         }
+        addDispensaryCoordinates()
+        zoomIn()
     }
 
 }

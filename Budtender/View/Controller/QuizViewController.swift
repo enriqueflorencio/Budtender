@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import SVProgressHUD
 
 public class QuizViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, QuizCellDelegate {
     public func didChooseAnswer(buttonIndex: Int) {
@@ -24,7 +25,7 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
         questionsArray[index.item].buttonTag = buttonIndex
         print("INDEX: \(index.item)")
         questionsArray[index.item].isAnswered = true
-        //currentQuestionNumber += 1
+        currentQuestionNumber += 1
         quizCollectionView.reloadItems(at: [index])
         
     }
@@ -54,7 +55,7 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
     private let previousButton = UIButton()
     private let nextButton = UIButton()
     private var questionsArray = [Question]()
-    private var currentQuestionNumber = 1
+    private var currentQuestionNumber = 0
     private var locationService: LocationService?
     private var userTags = [String]()
     
@@ -86,13 +87,19 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
         sender.pulsate()
         
         if(currentQuestionNumber == questionsArray.count) {
-            let resultViewController = ResultViewController(locationService: locationService)
+            displayLoadingScreen()
+            locationService?.delegate = nil
+            let resultViewController = ResultViewController(locationService: locationService, userTags: userTags)
             navigationController?.pushViewController(resultViewController, animated: true)
             
             return
         }
         var contentOffset = CGFloat(floor(self.quizCollectionView.contentOffset.x + self.quizCollectionView.bounds.size.width))
         self.moveToFrame(contentOffset)
+    }
+    
+    private func displayLoadingScreen() {
+        SVProgressHUD.show()
     }
     
     private func moveToFrame(_ contentOffset: CGFloat) {

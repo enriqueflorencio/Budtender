@@ -12,6 +12,10 @@ import SnapKit
 import CoreLocation
 
 public class SelectionViewController: UIViewController, LocationServiceDelegate {
+    public func queryDispensaries() {
+        
+    }
+    
     public func zoomToLatestLocation(coordinate: CLLocationCoordinate2D) {
         
     }
@@ -22,69 +26,22 @@ public class SelectionViewController: UIViewController, LocationServiceDelegate 
         }
     }
     
+    deinit {
+        print("OS is reclaiming memory")
+    }
+    
     private let animationView = AnimationView()
     private let starterText = UILabel()
     private let getStartedBtn = UIButton()
     private var locationService: LocationService?
-    //private let nearestDispensaryURL = "https://api-g.weedmaps.com/discovery/v1/listings?filter[bounding_box]=\(),\(),\(),\()&filter[plural_types][]=doctors&filter[plural_types][]=dispensaries&filter[plural_types][]=deliveries&size=100"
     private var tags = [Tag]()
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
-        ///Fetch JSON from api
-        //fetchJSON("blue-fire")
-//        fetchJSON("fire-leaf-dispensary-stockyard")
-//        fetchJSON("buddha-company-2")
-//        fetchJSON("bmc-2")
-//        fetchJSON("svc-home-of-the-louie-xiii")
-//        fetchJSON("exhale-med-center")
-//        fetchJSON("scsa-south-coast-safe-access")
-//        fetchJSON("concentrate-leader")
-//        fetchJSON("og-dispensary")
-//        fetchJSON("highnotewest")
-//        fetchJSON("happy-leaf-la")
-//        print("FIRELEAF")
-//        fetchJSON("fire-leaf-dispensary-stockyard")
-        
         ///Configure the layout
         configureLayout()
         setupAnimation()
         checkLocationServices()
-    }
-    
-    private func fetchJSON(_ dispensaryString: String) {
-        let weedmapsURLString = "https://api-g.weedmaps.com/discovery/v1/listings/dispensaries/\(dispensaryString)/menu_items?page=1&page_size=150&limit=150"
-        if let url = URL(string: weedmapsURLString) {
-            if let data = try? Data(contentsOf: url) {
-                parse(data)
-            }
-        }
-        
-    }
-    
-    private func parse(_ json: Data) {
-        let decoder = JSONDecoder()
-        
-        /// Use GCD later
-        if let jsonTags = try? decoder.decode(WeedData.self, from: json) {
-            var weedData = jsonTags.data
-            tags = weedData.menu_items
-        }
-        
-        for tag in tags {
-            
-            //print(tag.name)
-            if let arr = tag.tags {
-                for elm in arr {
-                    //print(elm.name)
-                    if(elm.name == "Euphoric") {
-                        print(tag.name)
-                    }
-                }
-            }
-
-        }
         
     }
     
@@ -139,14 +96,14 @@ public class SelectionViewController: UIViewController, LocationServiceDelegate 
             make.centerX.equalTo(view)
             make.centerY.equalTo(view)
         }
-        
-        
+
+
         animationView.backgroundColor = UIColor(red: 92/255, green: 197/255, blue: 243/255, alpha: 1.0)
         animationView.contentMode = .scaleAspectFit
         animationView.animationSpeed = 1.6
         animationView.loopMode = .loop
         animationView.play()
-        
+
     }
     
     @objc func takeQuiz(sender: UIButton!) {
@@ -155,8 +112,6 @@ public class SelectionViewController: UIViewController, LocationServiceDelegate 
         let quizViewController = QuizViewController(locationService: locationService)
         navigationController?.pushViewController(quizViewController, animated: true)
 
-//        let dispensaryViewController = DispensaryLocationViewController(locationService: locationService , strain: "OG Kush", dispensary: "Happy Leaf LA", tags: ["Happy", "Relaxed"], address: "2131 Westwood Blvd, Los Angeles, CA 90025")
-//        navigationController?.pushViewController(dispensaryViewController, animated: true)
     }
     
     public func presentAlertController() {
@@ -166,5 +121,3 @@ public class SelectionViewController: UIViewController, LocationServiceDelegate 
     }
 
 }
-
-

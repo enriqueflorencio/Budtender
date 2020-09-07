@@ -12,6 +12,7 @@ import MapKit
 public protocol LocationServiceDelegate: class {
     func notifyStatus(status: CLAuthorizationStatus)
     func zoomToLatestLocation(coordinate: CLLocationCoordinate2D)
+    func queryDispensaries()
 }
 
 public class LocationService: NSObject, CLLocationManagerDelegate {
@@ -24,7 +25,12 @@ public class LocationService: NSObject, CLLocationManagerDelegate {
     
     public var status: CLAuthorizationStatus?
     
-    private var currentCoordinate: CLLocationCoordinate2D?
+    public var currentCoordinate: CLLocationCoordinate2D?
+    
+    private var bottomLatitude: Double?
+    private var bottomLongitude: Double?
+    private var topLatitude: Double?
+    private var topLongitude: Double?
     
     public init(locationManager: CLLocationManager) {
         self.locationManager = locationManager
@@ -59,18 +65,48 @@ public class LocationService: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    public func makeBoundingBox(coordinate: CLLocationCoordinate2D) {
+    private func makeBoundingBox(coordinate: CLLocationCoordinate2D) {
         var deltay = radius / (111111)
         var deltax = radius / (111111 * cos(coordinate.latitude))
         
-        var topCornerlat = deltax + coordinate.longitude
-        var topCornerlong = deltay + coordinate.latitude
-        var bottomCornerlat = coordinate.longitude - deltax
-        var bottomCornerlong = coordinate.latitude - deltay
+        topLatitude = deltax + coordinate.longitude
+        topLongitude = deltay + coordinate.latitude
+        bottomLatitude = coordinate.longitude - deltax
+        bottomLongitude = coordinate.latitude - deltay
         
-        print("\(bottomCornerlong), \(bottomCornerlat), \(topCornerlong), \(topCornerlat)")
+        delegate?.queryDispensaries()
+
+    }
+    
+    public func getBottomLongitude() -> Double? {
+        guard let bottomLong = bottomLongitude else {
+            return nil
+        }
+        return bottomLong
+    }
+    
+    public func getBottomLatitude() -> Double? {
+        guard let bottomLat = bottomLatitude else {
+            return nil
+        }
         
+        return bottomLat
+    }
+    
+    public func getTopLongitude() -> Double? {
+        guard let topLong = topLongitude else {
+            return nil
+        }
         
+        return topLong
+    }
+    
+    public func getTopLatitude() -> Double? {
+        guard let topLat = topLatitude else {
+            return nil
+        }
+        
+        return topLat
     }
     
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -84,13 +120,15 @@ public class LocationService: NSObject, CLLocationManagerDelegate {
             return
         }
         
+        
         if(currentCoordinate == nil) {
-            delegate?.zoomToLatestLocation(coordinate: latestLocation.coordinate)
+            makeBoundingBox(coordinate: latestLocation.coordinate)
         }
+        
+        
         
         currentCoordinate = latestLocation.coordinate
         
-        makeBoundingBox(coordinate: latestLocation.coordinate)
     }
     
 }

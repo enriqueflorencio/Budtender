@@ -7,9 +7,10 @@ target 'Budtender' do
 
   # Pods for Budtender
   pod 'lottie-ios'
-
   
   pod 'SnapKit', '~> 5.0.0'
+
+  pod 'SVProgressHUD'
 
 
 end

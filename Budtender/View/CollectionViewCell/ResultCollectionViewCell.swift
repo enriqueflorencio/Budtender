@@ -12,7 +12,7 @@ import SnapKit
 public class ResultCollectionViewCell: UICollectionViewCell {
     
     private var budimageView = UIImageView()
-    private var budLabel = UILabel()
+    public var budLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,7 +25,6 @@ public class ResultCollectionViewCell: UICollectionViewCell {
     }
     
     private func configureBud() {
-        budLabel.text = "Blue Dream"
         budLabel.textColor = UIColor.black
         budLabel.textAlignment = .center
         budLabel.frame.size = CGSize(width: 145, height: 22)
