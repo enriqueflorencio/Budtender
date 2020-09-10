@@ -9,7 +9,9 @@
 import Foundation
 import UIKit
 
+///Extension for adding an animated effect to a UIButton.
 extension UIButton {
+    // MARK: Button Animations
     public func pulsate() {
         let pulse = CASpringAnimation(keyPath: "transform.scale")
         pulse.duration = 0.2

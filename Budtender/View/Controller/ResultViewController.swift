@@ -20,10 +20,6 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
         
     }
     
-    public func zoomToLatestLocation(coordinate: CLLocationCoordinate2D) {
-        ///This is messing everything up. Change it to something else. The delegation is off for the location service manager
-        
-    }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return herbs.count
@@ -34,12 +30,19 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
             fatalError("Could not dequeue reusable cell")
         }
         cell.budLabel.text = herbs[indexPath.row].name
+        cell.imageURL = herbs[indexPath.row].herbImageURL
         cell.layer.borderColor = UIColor(white: 0, alpha: 0.3).cgColor
         cell.layer.borderWidth = 2
         cell.layer.cornerRadius = 3
         cell.layer.cornerRadius = 7
         
         return cell
+    }
+    
+    
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
     }
     
     
@@ -50,6 +53,8 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
             selectedTags.append(element.name)
         }
         locationService?.delegate = nil
+        locationService?.locationManager.stopMonitoringSignificantLocationChanges()
+        locationService?.locationManager.stopUpdatingLocation()
         
         let dispensaryViewController = DispensaryLocationViewController(locationService: locationService , strain: selectedStrain.name, dispensary: selectedStrain.slug, tags: selectedTags, address: selectedStrain.address, dispensaryLatitude: selectedStrain.latitude, dispensaryLongitude: selectedStrain.longitude)
         navigationController?.pushViewController(dispensaryViewController, animated: true)
@@ -61,6 +66,7 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
     private var dispensarySlugs = [slugs]()
     private var herbs = [Herb]()
     
+    
     init(locationService: LocationService?, userTags: [String]) {
         self.locationService = locationService
         self.userTags = userTags
@@ -69,6 +75,10 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func displayLoadingScreen() {
+        SVProgressHUD.show()
     }
     
     private func fetchJSON(_ dispensaryString: String, _ address: String, _ latitude: Double, _ longitude: Double) {
@@ -83,6 +93,7 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
         
     private func fetchDispensaries() {
         
+        displayLoadingScreen()
         guard let bottomLong = locationService?.getBottomLongitude() else {
             return
         }
@@ -98,14 +109,18 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
         guard let topLat = locationService?.getTopLatitude() else {
             return
         }
-            
-        let nearestDispensaryURL = "https://api-g.weedmaps.com/discovery/v1/listings?filter[bounding_box]=\(bottomLong),\(bottomLat),\(topLong),\(topLat)&filter[plural_types][]=doctors&filter[plural_types][]=dispensaries&filter[plural_types][]=deliveries&size=100"
-        if let url = URL(string: nearestDispensaryURL) {
-            if let data = try? Data(contentsOf: url) {
-                print("HELLO")
-                parseDispensaries(data)
+        
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            let nearestDispensaryURL = "https://api-g.weedmaps.com/discovery/v1/listings?filter[bounding_box]=\(bottomLong),\(bottomLat),\(topLong),\(topLat)&filter[plural_types][]=doctors&filter[plural_types][]=dispensaries&filter[plural_types][]=deliveries&size=100"
+            if let url = URL(string: nearestDispensaryURL) {
+                if let data = try? Data(contentsOf: url) {
+                    print("HELLO")
+                    self?.parseDispensaries(data)
+                }
             }
         }
+            
+        
     }
         
     private func beginUpdatingLocation() {
@@ -128,26 +143,32 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
             fetchJSON(slug.slug!, slug.address!, slug.latitude!, slug.longitude!)
         }
         
-        SVProgressHUD.dismiss()
+        
     }
         
     private func parse(_ json: Data, _ dispensaryString: String, _ address: String, _ latitude: Double, _ longitude: Double) {
         let decoder = JSONDecoder()
 
         /// Use GCD later
-        if let jsonTags = try? decoder.decode(WeedData.self, from: json) {
+        if let jsonTags = try? decoder.decode(DispensaryDetails.self, from: json) {
             var weedData = jsonTags.data
             var tags = weedData.menu_items
             
             for tag in tags {
                 //print(tag.name)
+                
                 if let arr = tag.tags {
                     for elm in arr {
                         /// for the offficial method we need to check against the tags in our array
             
                         if(userTags.contains(elm.name)) {
+                            ///We're still in the background thread
+                            var productImageURL: String?
+                            if let avatarImage = tag.avatar_image {
+                                productImageURL = avatarImage.original_url!
+                            }
                             let newDispensaryString = dispensaryString.replacingOccurrences(of: "-", with: " ")
-                            let newHerb = Herb(name: tag.name, tags: arr, slug: newDispensaryString, latitude: latitude, longitude: longitude, address: address, locationService: locationService!)
+                            let newHerb = Herb(name: tag.name, tags: arr, slug: newDispensaryString, latitude: latitude, longitude: longitude, address: address, locationService: locationService!, herbImageURL: productImageURL!)
                             herbs.append(newHerb)
                             break
                         }
@@ -156,11 +177,12 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
 
             }
         }
-        
-        resultCollectionView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.resultCollectionView.reloadData()
+        }
+        dismissLoadingScreen()
 
     }
-    
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -172,6 +194,10 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
         
         
         // Do any additional setup after loading the view.
+    }
+    
+    private func dismissLoadingScreen() {
+        SVProgressHUD.dismiss()
     }
     
     private func configureCollectionView() {
@@ -200,6 +226,14 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
             make.right.equalTo(view.snp.right)
             make.bottom.equalTo(view.snp.bottom)
         }
+        displayLoadingScreen()
+        
+    }
+    
+    public override func didReceiveMemoryWarning() {
+        imageCache.removeAllObjects()
     }
 
 }
+
+let imageCache = NSCache<AnyObject, AnyObject>()

@@ -87,7 +87,7 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
         sender.pulsate()
         
         if(currentQuestionNumber == questionsArray.count) {
-            displayLoadingScreen()
+            
             locationService?.delegate = nil
             let resultViewController = ResultViewController(locationService: locationService, userTags: userTags)
             navigationController?.pushViewController(resultViewController, animated: true)
@@ -98,9 +98,7 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
         self.moveToFrame(contentOffset)
     }
     
-    private func displayLoadingScreen() {
-        SVProgressHUD.show()
-    }
+    
     
     private func moveToFrame(_ contentOffset: CGFloat) {
         let frame: CGRect = CGRect(x: contentOffset, y: self.quizCollectionView.contentOffset.y, width: self.quizCollectionView.frame.width, height: self.quizCollectionView.frame.height)

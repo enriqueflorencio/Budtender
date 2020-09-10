@@ -9,31 +9,45 @@
 import UIKit
 import SnapKit
 
+///Protocol that our quiz view controller will have to conform to in order to handle button clicks
 public protocol QuizCellDelegate: class {
     func didChooseAnswer(buttonIndex: Int)
 }
 
+///Collection View Cell that will be used for each question in our quiz
 public class QuizCollectionViewCell: UICollectionViewCell {
+    // MARK: Private/Public UI Elements
+    
+    ///Buttons that user can tap on (yes/no)
     private var trueButton = UIButton()
     private var falseButton = UIButton()
+    ///Label that will display our question to the user
     private let labelQuestion = UILabel()
+    ///Stores our true/false buttons into an array
+    private var buttonsArray = [UIButton]()
+    ///This will be used to tell the cell how to behave when an answer got chosen
+    public weak var delegate: QuizCellDelegate?
+    
+    ///In order for the cell to exist, we need to have a question ready for the user
     public var question: Question? {
         didSet {
+            ///Safely unwrap it
             guard let unwrappedQuestion = question else {
                 return
             }
+            ///Setup the labels and buttons with texts and titles
             labelQuestion.text = unwrappedQuestion.questionText
             trueButton.setTitle("Yes", for: .normal)
             falseButton.setTitle("No", for: .normal)
             
+            ///Set the button color to yellow to indicate that this question has been answered
             if unwrappedQuestion.isAnswered {
                 buttonsArray[unwrappedQuestion.buttonTag!].backgroundColor = UIColor.yellow
             }
         }
     }
     
-    private var buttonsArray = [UIButton]()
-    public weak var delegate: QuizCellDelegate?
+    // MARK: Constructors
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,6 +60,9 @@ public class QuizCollectionViewCell: UICollectionViewCell {
         fatalError("Not yet implemented")
     }
     
+    // MARK: UI Methods For Setting Up Cells
+    
+    ///This function will setup a label with a question and configure the font size, frame size, etc.
     private func configureQuestion() {
         labelQuestion.text = "This is a question?"
         labelQuestion.textColor = UIColor.black
@@ -55,24 +72,13 @@ public class QuizCollectionViewCell: UICollectionViewCell {
         labelQuestion.numberOfLines = 4
     }
     
-    @objc func buttonOptionAction(sender: UIButton) {
-        sender.pulsate()
-        
-        guard let unwrappedQuestion = question else {
-            return
-        }
-        
-        if(!unwrappedQuestion.isAnswered) {
-            print(sender.tag)
-            delegate?.didChooseAnswer(buttonIndex: sender.tag)
-        }
-    }
-    
+    ///This function will set the buttons background colors to white when they need to be reused
     public override func prepareForReuse() {
         trueButton.backgroundColor = UIColor.white
         falseButton.backgroundColor = UIColor.white
     }
     
+    ///This function will configure the constraints for each UI element inside of the cell with the help of SnapKit.
     private func configureViews() {
         addSubview(labelQuestion)
         labelQuestion.snp.makeConstraints { (make) in
@@ -103,6 +109,7 @@ public class QuizCollectionViewCell: UICollectionViewCell {
         buttonsArray.append(falseButton)
     }
     
+    ///This function will deliver a button for whenever its called
     private func getButton(_ tag: Int) -> UIButton {
         let btn = UIButton()
         btn.tag = tag
@@ -115,6 +122,23 @@ public class QuizCollectionViewCell: UICollectionViewCell {
         btn.clipsToBounds = true
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
+    }
+    
+    // MARK: Objective-C Functions
+    
+    ///This function handles a button click
+    @objc func buttonOptionAction(sender: UIButton) {
+        ///Animate the button click
+        sender.pulsate()
+        
+        guard let unwrappedQuestion = question else {
+            return
+        }
+        
+        ///If the question hasn't been answered yet then the quiz view controller will handle it accordingly
+        if(!unwrappedQuestion.isAnswered) {
+            delegate?.didChooseAnswer(buttonIndex: sender.tag)
+        }
     }
     
 }

@@ -12,8 +12,10 @@
 		CF2C50DC24E5D1C700A41AEE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF2C50DB24E5D1C700A41AEE /* Assets.xcassets */; };
 		CF2C50DF24E5D1C700A41AEE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF2C50DD24E5D1C700A41AEE /* LaunchScreen.storyboard */; };
 		CF3192BE24E5E0640082F9FA /* SelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF3192BD24E5E0640082F9FA /* SelectionViewController.swift */; };
+		CF6E28C9250A084F001C7D54 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6E28C8250A084F001C7D54 /* UIImage+Extensions.swift */; };
 		CF74EF7B25042293003D5896 /* Herb.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF74EF7A25042293003D5896 /* Herb.swift */; };
 		CF74EF7D25058CC3003D5896 /* DispensaryMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF74EF7C25058CC3003D5896 /* DispensaryMap.swift */; };
+		CF74EF7F2507010A003D5896 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF74EF7E2507010A003D5896 /* SceneDelegate.swift */; };
 		CF866A6F24F0965B00C7C223 /* ResultCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A6E24F0965B00C7C223 /* ResultCollectionViewCell.swift */; };
 		CF866A7124F09AC000C7C223 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A7024F09AC000C7C223 /* ResultViewController.swift */; };
 		CF866A7324F3199C00C7C223 /* DispensaryLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A7224F3199C00C7C223 /* DispensaryLocationViewController.swift */; };
@@ -21,7 +23,7 @@
 		CF866A7A24FDA9D800C7C223 /* DispensaryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A7924FDA9D800C7C223 /* DispensaryData.swift */; };
 		CF866A8024FDC1EC00C7C223 /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF866A7F24FDC1EC00C7C223 /* UIButton+Extensions.swift */; };
 		CF942ED224E75DD8001E16D4 /* QuizViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF942ED124E75DD8001E16D4 /* QuizViewController.swift */; };
-		CF942EDC24E77D08001E16D4 /* WeedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF942EDB24E77D08001E16D4 /* WeedData.swift */; };
+		CF942EDC24E77D08001E16D4 /* MenuData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF942EDB24E77D08001E16D4 /* MenuData.swift */; };
 		CF942EE024ECA02E001E16D4 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF942EDF24ECA02E001E16D4 /* Question.swift */; };
 		CF942EE324ECBA80001E16D4 /* QuizCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF942EE224ECBA80001E16D4 /* QuizCollectionViewCell.swift */; };
 		CF942EE524ECBD79001E16D4 /* map.json in Resources */ = {isa = PBXBuildFile; fileRef = CF942EE424ECBD79001E16D4 /* map.json */; };
@@ -36,8 +38,10 @@
 		CF2C50DE24E5D1C700A41AEE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CF2C50E024E5D1C700A41AEE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CF3192BD24E5E0640082F9FA /* SelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionViewController.swift; sourceTree = "<group>"; };
+		CF6E28C8250A084F001C7D54 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		CF74EF7A25042293003D5896 /* Herb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Herb.swift; sourceTree = "<group>"; };
 		CF74EF7C25058CC3003D5896 /* DispensaryMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispensaryMap.swift; sourceTree = "<group>"; };
+		CF74EF7E2507010A003D5896 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		CF866A6E24F0965B00C7C223 /* ResultCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCollectionViewCell.swift; sourceTree = "<group>"; };
 		CF866A7024F09AC000C7C223 /* ResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
 		CF866A7224F3199C00C7C223 /* DispensaryLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispensaryLocationViewController.swift; sourceTree = "<group>"; };
@@ -45,7 +49,7 @@
 		CF866A7924FDA9D800C7C223 /* DispensaryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispensaryData.swift; sourceTree = "<group>"; };
 		CF866A7F24FDC1EC00C7C223 /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
 		CF942ED124E75DD8001E16D4 /* QuizViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewController.swift; sourceTree = "<group>"; };
-		CF942EDB24E77D08001E16D4 /* WeedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeedData.swift; sourceTree = "<group>"; };
+		CF942EDB24E77D08001E16D4 /* MenuData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuData.swift; sourceTree = "<group>"; };
 		CF942EDF24ECA02E001E16D4 /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		CF942EE224ECBA80001E16D4 /* QuizCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizCollectionViewCell.swift; sourceTree = "<group>"; };
 		CF942EE424ECBD79001E16D4 /* map.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = map.json; path = ../../../../../Downloads/map.json; sourceTree = "<group>"; };
@@ -107,6 +111,7 @@
 				CF2C50E624E5D1E400A41AEE /* Model */,
 				CF2C50E824E5D1FB00A41AEE /* View */,
 				CF2C50D224E5D1C400A41AEE /* AppDelegate.swift */,
+				CF74EF7E2507010A003D5896 /* SceneDelegate.swift */,
 				CF2C50DB24E5D1C700A41AEE /* Assets.xcassets */,
 				CF2C50DD24E5D1C700A41AEE /* LaunchScreen.storyboard */,
 				CF2C50E024E5D1C700A41AEE /* Info.plist */,
@@ -117,7 +122,7 @@
 		CF2C50E624E5D1E400A41AEE /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				CF942EDB24E77D08001E16D4 /* WeedData.swift */,
+				CF942EDB24E77D08001E16D4 /* MenuData.swift */,
 				CF74EF7C25058CC3003D5896 /* DispensaryMap.swift */,
 				CF866A7924FDA9D800C7C223 /* DispensaryData.swift */,
 				CF942EDF24ECA02E001E16D4 /* Question.swift */,
@@ -159,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				CF866A7F24FDC1EC00C7C223 /* UIButton+Extensions.swift */,
+				CF6E28C8250A084F001C7D54 /* UIImage+Extensions.swift */,
 			);
 			path = UIFoundation;
 			sourceTree = "<group>";
@@ -292,15 +298,17 @@
 				CF866A8024FDC1EC00C7C223 /* UIButton+Extensions.swift in Sources */,
 				CF866A7324F3199C00C7C223 /* DispensaryLocationViewController.swift in Sources */,
 				CF3192BE24E5E0640082F9FA /* SelectionViewController.swift in Sources */,
+				CF74EF7F2507010A003D5896 /* SceneDelegate.swift in Sources */,
 				CF866A7624F480E500C7C223 /* LocationService.swift in Sources */,
 				CF866A7A24FDA9D800C7C223 /* DispensaryData.swift in Sources */,
 				CF942EE024ECA02E001E16D4 /* Question.swift in Sources */,
-				CF942EDC24E77D08001E16D4 /* WeedData.swift in Sources */,
+				CF942EDC24E77D08001E16D4 /* MenuData.swift in Sources */,
 				CF942EE324ECBA80001E16D4 /* QuizCollectionViewCell.swift in Sources */,
 				CF942ED224E75DD8001E16D4 /* QuizViewController.swift in Sources */,
 				CF866A6F24F0965B00C7C223 /* ResultCollectionViewCell.swift in Sources */,
 				CF74EF7B25042293003D5896 /* Herb.swift in Sources */,
 				CF866A7124F09AC000C7C223 /* ResultViewController.swift in Sources */,
+				CF6E28C9250A084F001C7D54 /* UIImage+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -20,10 +20,6 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         
     }
     
-    public func zoomToLatestLocation(coordinate: CLLocationCoordinate2D) {
-        
-    }
-    
     private func zoomIn() {
         var zoomRect = MKMapRect.null;
         var myx = MKMapPoint((locationService?.currentCoordinate)!)
