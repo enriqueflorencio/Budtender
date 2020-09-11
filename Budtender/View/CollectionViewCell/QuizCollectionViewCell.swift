@@ -91,7 +91,7 @@ public class QuizCollectionViewCell: UICollectionViewCell {
         addSubview(trueButton)
         trueButton.snp.makeConstraints { (make) in
             make.top.equalTo(labelQuestion.snp.bottom).inset(20)
-            make.right.equalTo(snp.centerX).inset(-10)
+            make.left.equalTo(snp.left).inset(30)
             make.width.equalTo(150)
             make.height.equalTo(50)
         }
@@ -101,7 +101,7 @@ public class QuizCollectionViewCell: UICollectionViewCell {
         addSubview(falseButton)
         falseButton.snp.makeConstraints { (make) in
             make.top.equalTo(trueButton.snp.top)
-            make.left.equalTo(snp.centerX).inset(10)
+            make.right.equalTo(snp.right).inset(30)
             make.width.equalTo(150)
             make.height.equalTo(50)
         }

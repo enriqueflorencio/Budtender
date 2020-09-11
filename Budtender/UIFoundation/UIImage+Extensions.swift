@@ -9,7 +9,9 @@
 import Foundation
 import UIKit
 
+///Extension for downsizing an image from the Weedmaps API.
 extension UIImage {
+    // MARK: Image Resizing
     public func resizeImage(newSize: CGSize) -> UIImage {
         let horizontalRatio = newSize.width / size.width
         let verticalRatio = newSize.height / size.height

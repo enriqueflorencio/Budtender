@@ -13,7 +13,6 @@ import CoreLocation
 
 public class SelectionViewController: UIViewController, LocationServiceDelegate {
     
-    
     private let animationView = AnimationView()
     private let starterText = UILabel()
     private let getStartedBtn = UIButton()
@@ -110,6 +109,7 @@ public class SelectionViewController: UIViewController, LocationServiceDelegate 
     public func notifyStatus(status: CLAuthorizationStatus) {
         if(status == .denied) {
             presentAlertController()
+            getStartedBtn.isEnabled = false
         }
     }
 

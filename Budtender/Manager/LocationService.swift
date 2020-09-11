@@ -92,7 +92,7 @@ public class LocationService: NSObject, CLLocationManagerDelegate {
     
     ///This will calculate a user's bounding box which will be used inside the weedmaps API
     private func makeBoundingBox(coordinate: CLLocationCoordinate2D) {
-        ///Okay if I'm being honest, my house mates are physics majors and they helped me with this calculation. Credit to Ethan Custodio and Stefan Faaland (You guys are gonna tear it up in grad school)
+        ///Okay if I'm being honest, my housemates are physics majors and they helped me with this calculation. Credit to Ethan Custodio and Stefan Faaland (You guys are gonna tear it up in grad school)
         var deltay = radius / (111111)
         var deltax = radius / (111111 * cos(coordinate.latitude))
         

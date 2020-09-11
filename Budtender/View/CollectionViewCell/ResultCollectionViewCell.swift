@@ -79,24 +79,29 @@ public class ResultCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    ///Each cell is going to make network requests in order to fetch UI Images from the weedmaps API.
     private func configureImageView() {
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let url = URL(string: (self?.imageURL!)!) else {
                 return
             }
             
+            ///If the image is already in the cache then don't make the request and update the imageView to what's in the cache
             if let imageFromCache = imageCache.object(forKey: url as AnyObject) as? UIImage {
+                ///Updates to the UI run on the main thread
                 DispatchQueue.main.async { [weak self] in
                     self?.budimageView.image = imageFromCache
                 }
                 
             } else {
+                ///Cache miss and so we make the network request
                 guard let data = try? Data(contentsOf: url) else {
                     return
                 }
-                
+                ///Resize the image to optimize memory usage and insert it into the cache
                 var imageToCache = UIImage(data: data)?.resizeImage(newSize: CGSize(width: 100, height: 100))
                 imageCache.setObject(imageToCache!, forKey: url as AnyObject)
+                ///Updates to the UI occur on the main thread
                 DispatchQueue.main.async { [weak self] in
                     self?.budimageView.image = imageToCache
                 }

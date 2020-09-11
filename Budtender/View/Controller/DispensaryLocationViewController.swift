@@ -33,16 +33,21 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         mapView.setVisibleMapRect(zoomRect, animated: true)
     }
     
-    
-    private let strain: String
     private var locationService: LocationService?
+    private let strain: String
     private let dispensary: String
     private let tags: [String]
     private let address: String
     private let dispensaryLatitude: Double
     private let dispensaryLongitude: Double
+    private let productURL: String
+    private let strainView = UIImageView()
+    private let strainLabel = UILabel()
+    private let dispensaryLabel = UILabel()
+    private var tagsLabel = UILabel()
+    private let mapView = MKMapView()
     
-    public init(locationService: LocationService?, strain: String, dispensary: String, tags: [String], address: String, dispensaryLatitude: Double, dispensaryLongitude: Double) {
+    public init(locationService: LocationService?, strain: String, dispensary: String, tags: [String], address: String, dispensaryLatitude: Double, dispensaryLongitude: Double, productURL: String) {
         self.locationService = locationService
         self.strain = strain
         self.dispensary = dispensary
@@ -50,16 +55,9 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         self.address = address
         self.dispensaryLatitude = dispensaryLatitude
         self.dispensaryLongitude = dispensaryLongitude
+        self.productURL = productURL
         super.init(nibName: nil, bundle: nil)
     }
-    
-    private let strainView = UIImageView()
-    private let strainLabel = UILabel()
-    private let dispensaryLabel = UILabel()
-    private var tagsLabel = UILabel()
-    private let mapView = MKMapView()
-    
-    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -115,7 +113,9 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
     }
     
     private func configureImageView() {
+        ///Check for the image in the cache
         strainView.image = UIImage(named: "cannabis")
+        fetchImageView()
         strainView.layer.borderColor = UIColor(white: 0, alpha: 0.3).cgColor
         strainView.layer.borderWidth = 2
         strainView.layer.cornerRadius = 3
@@ -130,6 +130,41 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         }
         
     }
+    
+    
+    private func fetchImageView() {
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let url = URL(string: (self?.productURL)!) else {
+                return
+            }
+            
+            ///If the image is already in the cache then don't make the request and update the imageView to what's in the cache
+            if let imageFromCache = imageCache.object(forKey: url as AnyObject) as? UIImage {
+                ///Updates to the UI run on the main thread
+                DispatchQueue.main.async { [weak self] in
+                    self?.strainView.image = imageFromCache
+                }
+                
+            } else {
+                guard let data = try? Data(contentsOf: url) else {
+                    return
+                }
+                ///Resize the image to optimize memory usage and insert it into the cache
+                var weedmapsImageToCache = UIImage(data: data)?.resizeImage(newSize: CGSize(width: 100, height: 100))
+                imageCache.setObject(weedmapsImageToCache!, forKey: url as AnyObject)
+
+                ///Updates to the UI occur on the main thread
+                DispatchQueue.main.async { [weak self] in
+                    self?.strainView.image = weedmapsImageToCache
+                }
+            }
+
+            
+        }
+
+
+    }
+        
     
     private func configureLabels() {
         strainLabel.text = "Product: \(strain)"
@@ -176,12 +211,13 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         }
         dispensaryLabel.text = "Dispensary Name: "
         dispensaryLabel.text! += dispensary
+        dispensaryLabel.text! += "\nAddress: \(address)"
         dispensaryLabel.text! += "\nDistance: "
         dispensaryLabel.layer.borderColor = UIColor(white: 0, alpha: 0.3).cgColor
         dispensaryLabel.layer.borderWidth = 2
         dispensaryLabel.layer.cornerRadius = 3
         dispensaryLabel.layer.cornerRadius = 7
-        dispensaryLabel.numberOfLines = 2
+        dispensaryLabel.numberOfLines = 3
         dispensaryLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
         dispensaryLabel.textAlignment = .center
         view.addSubview(dispensaryLabel)
@@ -209,11 +245,11 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         }
         view.addSubview(mapView)
         mapView.snp.makeConstraints { (make) in
-            make.width.equalTo(340)
-            make.height.equalTo(280)
+            make.width.equalTo(view.snp.width).multipliedBy(0.95)
+            make.height.equalTo(view.snp.height).multipliedBy(0.40)
             make.left.equalTo(view.snp.left).inset(10)
             make.right.equalTo(view.snp.right).inset(10)
-            make.top.equalTo(dispensaryLabel.snp.bottom).offset(15)
+            make.bottom.equalTo(view.snp.bottomMargin).inset(5)
             
         }
         addDispensaryCoordinates()

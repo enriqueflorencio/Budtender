@@ -13,7 +13,26 @@ import SVProgressHUD
 
 public class ResultViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, LocationServiceDelegate {
     public func queryDispensaries() {
-        fetchDispensaries()
+        fetchDispensaries() { completedDictionary in
+            self.matchingAlgorithm(completedDictionary)
+            DispatchQueue.main.async { [weak self] in
+                self!.resultCollectionView.reloadData()
+                self!.dismissLoadingScreen()
+            }
+            
+        }
+    }
+    
+    private func matchingAlgorithm(_ completedDictionary: [Int : [Herb]?]) {
+        for i in (0 ..< 9).reversed() {
+            if let matchesDict = matchesDictionary[i] {
+                for product in matchesDict {
+                    herbs.append(product)
+                }
+            }
+            
+        }
+        
     }
     
     public func notifyStatus(status: CLAuthorizationStatus) {
@@ -56,11 +75,12 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
         locationService?.locationManager.stopMonitoringSignificantLocationChanges()
         locationService?.locationManager.stopUpdatingLocation()
         
-        let dispensaryViewController = DispensaryLocationViewController(locationService: locationService , strain: selectedStrain.name, dispensary: selectedStrain.slug, tags: selectedTags, address: selectedStrain.address, dispensaryLatitude: selectedStrain.latitude, dispensaryLongitude: selectedStrain.longitude)
+        let dispensaryViewController = DispensaryLocationViewController(locationService: locationService , strain: selectedStrain.name, dispensary: selectedStrain.slug, tags: selectedTags, address: selectedStrain.address, dispensaryLatitude: selectedStrain.latitude, dispensaryLongitude: selectedStrain.longitude, productURL: selectedStrain.herbImageURL)
         navigationController?.pushViewController(dispensaryViewController, animated: true)
     }
     
     private var resultCollectionView: UICollectionView!
+    private var matchesDictionary : [Int : [Herb]] = [:]
     private var locationService: LocationService?
     private var userTags = [String]()
     private var dispensarySlugs = [slugs]()
@@ -78,6 +98,7 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
     }
     
     private func displayLoadingScreen() {
+        
         SVProgressHUD.show()
     }
     
@@ -91,7 +112,7 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
 
     }
         
-    private func fetchDispensaries() {
+    private func fetchDispensaries(callback: @escaping ([Int : [Herb]?]) -> Void) {
         
         displayLoadingScreen()
         guard let bottomLong = locationService?.getBottomLongitude() else {
@@ -114,10 +135,10 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
             let nearestDispensaryURL = "https://api-g.weedmaps.com/discovery/v1/listings?filter[bounding_box]=\(bottomLong),\(bottomLat),\(topLong),\(topLat)&filter[plural_types][]=doctors&filter[plural_types][]=dispensaries&filter[plural_types][]=deliveries&size=100"
             if let url = URL(string: nearestDispensaryURL) {
                 if let data = try? Data(contentsOf: url) {
-                    print("HELLO")
                     self?.parseDispensaries(data)
                 }
             }
+            callback(self!.matchesDictionary)
         }
             
         
@@ -150,37 +171,33 @@ public class ResultViewController: UIViewController, UICollectionViewDelegate, U
         let decoder = JSONDecoder()
 
         /// Use GCD later
-        if let jsonTags = try? decoder.decode(DispensaryDetails.self, from: json) {
+        if var jsonTags = try? decoder.decode(DispensaryDetails.self, from: json) {
             var weedData = jsonTags.data
             var tags = weedData.menu_items
+            var matches = 0
             
             for tag in tags {
-                //print(tag.name)
                 
                 if let arr = tag.tags {
                     for elm in arr {
-                        /// for the offficial method we need to check against the tags in our array
-            
+                        ///We're still in the background thread
                         if(userTags.contains(elm.name)) {
-                            ///We're still in the background thread
-                            var productImageURL: String?
-                            if let avatarImage = tag.avatar_image {
-                                productImageURL = avatarImage.original_url!
-                            }
-                            let newDispensaryString = dispensaryString.replacingOccurrences(of: "-", with: " ")
-                            let newHerb = Herb(name: tag.name, tags: arr, slug: newDispensaryString, latitude: latitude, longitude: longitude, address: address, locationService: locationService!, herbImageURL: productImageURL!)
-                            herbs.append(newHerb)
-                            break
+                            matches += 1
                         }
+                        
                     }
+                    
+                    
+                        let newDispensaryString = dispensaryString.replacingOccurrences(of: "-", with: " ")
+                        var newHerb = Herb(name: tag.name, tags: arr, slug: newDispensaryString, latitude: latitude, longitude: longitude, address: address, locationService: locationService!, herbImageURL: (tag.avatar_image?.original_url)!)
+                        
+                        matchesDictionary[matches, default: []].append(newHerb)
+                    
                 }
+                matches = 0
 
             }
         }
-        DispatchQueue.main.async { [weak self] in
-            self?.resultCollectionView.reloadData()
-        }
-        dismissLoadingScreen()
 
     }
 

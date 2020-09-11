@@ -14,7 +14,7 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
     public func didChooseAnswer(buttonIndex: Int) {
         let centerindex = getCenterIndex()
         guard let index = centerindex else {
-            print("RETURNING")
+            
             return
         }
         
@@ -23,7 +23,7 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
         }
         
         questionsArray[index.item].buttonTag = buttonIndex
-        print("INDEX: \(index.item)")
+        
         questionsArray[index.item].isAnswered = true
         currentQuestionNumber += 1
         quizCollectionView.reloadItems(at: [index])
@@ -33,7 +33,6 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
     private func getCenterIndex() -> IndexPath? {
         let center = self.view.convert(self.quizCollectionView.center, to: self.quizCollectionView)
         let index = quizCollectionView.indexPathForItem(at: center)
-        print(index ?? "index not found")
         return index
     }
     
