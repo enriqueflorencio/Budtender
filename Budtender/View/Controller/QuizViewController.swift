@@ -169,10 +169,10 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
     
     private func setupViews() {
         quizCollectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(view.snp.top)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.left.equalTo(view.snp.left)
             make.right.equalTo(view.snp.right)
-            make.bottom.equalTo(view.snp.bottom)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         
         view.addSubview(previousButton)
