@@ -217,13 +217,13 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         dispensaryLabel.layer.borderWidth = 2
         dispensaryLabel.layer.cornerRadius = 3
         dispensaryLabel.layer.cornerRadius = 7
-        dispensaryLabel.numberOfLines = 3
+        dispensaryLabel.numberOfLines = 4
         dispensaryLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
         dispensaryLabel.textAlignment = .center
         view.addSubview(dispensaryLabel)
         dispensaryLabel.snp.makeConstraints { (make) in
             make.width.equalTo(300)
-            make.height.equalTo(80)
+            make.height.equalTo(90)
             make.top.equalTo(tagsLabel.snp.bottom).offset(15)
             make.left.equalTo(view.snp.left).inset(10)
             make.right.equalTo(view.snp.right).inset(10)

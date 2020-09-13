@@ -57,6 +57,7 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
     private var currentQuestionNumber = 0
     private var locationService: LocationService?
     private var userTags = [String]()
+    private var screenRect: UILayoutGuide?
     
     init(locationService: LocationService?) {
         self.locationService = locationService
@@ -70,10 +71,18 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        print(view.frame.height)
         configureView()
         configureButtons()
         configureCollectionView()
+    }
+    
+    public override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        screenRect = view.safeAreaLayoutGuide
+        
+        
     }
     
     @objc func previousAction(_ sender: UIButton) {
@@ -101,6 +110,7 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
     
     private func moveToFrame(_ contentOffset: CGFloat) {
         let frame: CGRect = CGRect(x: contentOffset, y: self.quizCollectionView.contentOffset.y, width: self.quizCollectionView.frame.width, height: self.quizCollectionView.frame.height)
+        print(self.quizCollectionView.frame.height)
         self.quizCollectionView.scrollRectToVisible(frame, animated: true)
     }
     
@@ -126,6 +136,7 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.itemSize = CGSize(width: view.frame.width, height: view.frame.height)
+        layout.estimatedItemSize = .zero
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 1
         layout.minimumInteritemSpacing = 1
@@ -169,7 +180,7 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
             make.height.equalTo(50)
             make.width.equalTo(view.snp.width).multipliedBy(0.5)
             make.left.equalTo(view.snp.left)
-            make.bottom.equalTo(view.snp.bottom)
+            make.bottom.equalTo(view.snp.bottomMargin)
         }
         
         view.addSubview(nextButton)
@@ -177,7 +188,7 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
             make.height.equalTo(previousButton.snp.height)
             make.width.equalTo(previousButton.snp.width)
             make.right.equalTo(view.snp.right)
-            make.bottom.equalTo(view.snp.bottom)
+            make.bottom.equalTo(view.snp.bottomMargin)
         }
         
     }

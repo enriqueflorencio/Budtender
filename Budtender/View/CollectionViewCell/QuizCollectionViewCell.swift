@@ -82,7 +82,7 @@ public class QuizCollectionViewCell: UICollectionViewCell {
     private func configureViews() {
         addSubview(labelQuestion)
         labelQuestion.snp.makeConstraints { (make) in
-            make.top.equalTo(snp.top)
+            make.top.equalTo(snp.top).offset(20)
             make.centerX.equalTo(snp.centerX)
             make.width.height.equalTo(150)
         }
