@@ -11,27 +11,9 @@ import MapKit
 import CoreLocation
 import SnapKit
 
-public class DispensaryLocationViewController: UIViewController, MKMapViewDelegate, LocationServiceDelegate {
-    public func queryDispensaries() {
-        
-    }
+public class DispensaryLocationViewController: UIViewController, MKMapViewDelegate {
     
-    public func notifyStatus(status: CLAuthorizationStatus) {
-        
-    }
-    
-    private func zoomIn() {
-        var zoomRect = MKMapRect.null;
-        var myx = MKMapPoint((locationService?.currentCoordinate)!)
-        var f = CLLocationCoordinate2D(latitude: dispensaryLatitude, longitude: dispensaryLongitude)
-        var disx = MKMapPoint(f)
-        var myLocationPointRect = MKMapRect(origin: myx, size: MKMapSize(width: 0.0, height: 0.0))
-        var currentDestinationPointRect = MKMapRect(origin: disx, size: MKMapSize(width: 0.0, height: 0.0))
-
-        zoomRect = currentDestinationPointRect
-        zoomRect = zoomRect.union(myLocationPointRect)
-        mapView.setVisibleMapRect(zoomRect, animated: true)
-    }
+    // MARK: Private Variables
     
     private var locationService: LocationService?
     private let strain: String
@@ -46,6 +28,8 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
     private let dispensaryLabel = UILabel()
     private var tagsLabel = UILabel()
     private let mapView = MKMapView()
+    
+    // MARK: Constructor Methods
     
     public init(locationService: LocationService?, strain: String, dispensary: String, tags: [String], address: String, dispensaryLatitude: Double, dispensaryLongitude: Double, productURL: String) {
         self.locationService = locationService
@@ -63,53 +47,21 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: View Controller Life Cycle Methods
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
-        configureViews()
+        configureView()
         configureImageView()
         configureLabels()
         configureMapView()
     }
     
-    /// The view isn't going back to normal. FIX THIS
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        configureMapView()
-    }
+    // MARK: UI Methods
     
-    private func configureViews() {
+    private func configureView() {
         title = strain
         view.backgroundColor = UIColor.white
-        locationService?.delegate = self
-    }
-    
-    private func addDispensaryCoordinates() {
-        let dispensaryInformation = DispensaryMap(title: dispensary, coordinate: CLLocationCoordinate2D(latitude: dispensaryLatitude, longitude: dispensaryLongitude))
-        mapView.addAnnotation(dispensaryInformation)
-        direct()
-    }
-    
-    private func direct() {
-        let request = MKDirections.Request()
-        request.source = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: (locationService?.currentCoordinate!.latitude)!, longitude: (locationService?.currentCoordinate!.longitude)!), addressDictionary: nil))
-        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: dispensaryLatitude, longitude: dispensaryLongitude), addressDictionary: nil))
-        request.requestsAlternateRoutes = true
-        request.transportType = .automobile
-        
-        let directions = MKDirections(request: request)
-        directions.calculate { [unowned self] (response, error) in
-            guard let unwrappedResponse = response else {
-                return
-            }
-            
-            let route = unwrappedResponse.routes[0] as MKRoute
-            let distance = route.distance / 1609
-            
-            if(self.dispensaryLabel.text?.last == " ") {
-                self.dispensaryLabel.text! += String(format: "%.1f miles", distance)
-            }
-            
-        }
     }
     
     private func configureImageView() {
@@ -130,41 +82,6 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         }
         
     }
-    
-    
-    private func fetchImageView() {
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            guard let url = URL(string: (self?.productURL)!) else {
-                return
-            }
-            
-            ///If the image is already in the cache then don't make the request and update the imageView to what's in the cache
-            if let imageFromCache = imageCache.object(forKey: url as AnyObject) as? UIImage {
-                ///Updates to the UI run on the main thread
-                DispatchQueue.main.async { [weak self] in
-                    self?.strainView.image = imageFromCache
-                }
-                
-            } else {
-                guard let data = try? Data(contentsOf: url) else {
-                    return
-                }
-                ///Resize the image to optimize memory usage and insert it into the cache
-                var weedmapsImageToCache = UIImage(data: data)?.resizeImage(newSize: CGSize(width: 100, height: 100))
-                imageCache.setObject(weedmapsImageToCache!, forKey: url as AnyObject)
-
-                ///Updates to the UI occur on the main thread
-                DispatchQueue.main.async { [weak self] in
-                    self?.strainView.image = weedmapsImageToCache
-                }
-            }
-
-            
-        }
-
-
-    }
-        
     
     private func configureLabels() {
         strainLabel.text = "Product: \(strain)"
@@ -230,13 +147,7 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         }
     }
     
-    private func beginUpdatingLocation() {
-        mapView.showsUserLocation = true
-        locationService?.locationManager.startUpdatingLocation()
-    }
-    
     private func configureMapView() {
-        
         mapView.mapType = MKMapType.standard
         mapView.isZoomEnabled = true
         mapView.isScrollEnabled = true
@@ -246,7 +157,7 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         view.addSubview(mapView)
         mapView.snp.makeConstraints { (make) in
             make.width.equalTo(view.snp.width).multipliedBy(0.95)
-            make.height.equalTo(view.snp.height).multipliedBy(0.40)
+            make.height.equalTo(view.snp.height).multipliedBy(0.35)
             make.left.equalTo(view.snp.left).inset(10)
             make.right.equalTo(view.snp.right).inset(10)
             make.bottom.equalTo(view.snp.bottomMargin).inset(5)
@@ -255,5 +166,89 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         addDispensaryCoordinates()
         zoomIn()
     }
+    
+    private func fetchImageView() {
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let url = URL(string: (self?.productURL)!) else {
+                return
+            }
+            
+            ///If the image is already in the cache then don't make the request and update the imageView to what's in the cache
+            if let imageFromCache = imageCache.object(forKey: url as AnyObject) as? UIImage {
+                ///Updates to the UI run on the main thread
+                DispatchQueue.main.async { [weak self] in
+                    self?.strainView.image = imageFromCache
+                }
+                
+            } else {
+                guard let data = try? Data(contentsOf: url) else {
+                    return
+                }
+                ///Resize the image to optimize memory usage and insert it into the cache
+                var weedmapsImageToCache = UIImage(data: data)?.resizeImage(newSize: CGSize(width: 100, height: 100))
+                imageCache.setObject(weedmapsImageToCache!, forKey: url as AnyObject)
+
+                ///Updates to the UI occur on the main thread
+                DispatchQueue.main.async { [weak self] in
+                    self?.strainView.image = weedmapsImageToCache
+                }
+            }
+
+            
+        }
+
+
+    }
+    
+    // MARK: Location Service Helper Methods
+        
+    private func addDispensaryCoordinates() {
+        let dispensaryInformation = DispensaryMap(title: dispensary, coordinate: CLLocationCoordinate2D(latitude: dispensaryLatitude, longitude: dispensaryLongitude))
+        mapView.addAnnotation(dispensaryInformation)
+        direct()
+    }
+    
+    private func direct() {
+        let request = MKDirections.Request()
+        request.source = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: (locationService?.currentCoordinate!.latitude)!, longitude: (locationService?.currentCoordinate!.longitude)!), addressDictionary: nil))
+        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: dispensaryLatitude, longitude: dispensaryLongitude), addressDictionary: nil))
+        request.requestsAlternateRoutes = true
+        request.transportType = .automobile
+        
+        let directions = MKDirections(request: request)
+        directions.calculate { [unowned self] (response, error) in
+            guard let unwrappedResponse = response else {
+                return
+            }
+            
+            let route = unwrappedResponse.routes[0] as MKRoute
+            let distance = route.distance / 1609
+            
+            if(self.dispensaryLabel.text?.last == " ") {
+                self.dispensaryLabel.text! += String(format: "%.1f miles", distance)
+            }
+            
+        }
+    }
+    
+    private func beginUpdatingLocation() {
+        mapView.showsUserLocation = true
+        locationService?.locationManager.startUpdatingLocation()
+    }
+    
+    private func zoomIn() {
+        var zoomRect = MKMapRect.null;
+        var currentCoordinate = MKMapPoint((locationService?.currentCoordinate)!)
+        var currentLatLon = CLLocationCoordinate2D(latitude: dispensaryLatitude, longitude: dispensaryLongitude)
+        var currentPoint = MKMapPoint(currentLatLon)
+        var myLocationPointRect = MKMapRect(origin: currentCoordinate, size: MKMapSize(width: 0.0, height: 0.0))
+        var currentDestinationPointRect = MKMapRect(origin: currentPoint, size: MKMapSize(width: 0.0, height: 0.0))
+
+        zoomRect = currentDestinationPointRect
+        zoomRect = zoomRect.union(myLocationPointRect)
+        mapView.setVisibleMapRect(zoomRect, animated: true)
+    }
+    
+    
 
 }

@@ -59,7 +59,6 @@ public class ResultCollectionViewCell: UICollectionViewCell {
     private func configureViews() {
         self.backgroundColor = UIColor.white
         
-        //budimageView.image = UIImage(named: "cannabis")
         budimageView.contentMode = .scaleAspectFit
         addSubview(budimageView)
         budimageView.snp.makeConstraints { (make) in

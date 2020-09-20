@@ -11,12 +11,17 @@ import Lottie
 import SnapKit
 import CoreLocation
 
+///The root view controller that prompts a user to give us access to their location.
 public class SelectionViewController: UIViewController, LocationServiceDelegate {
+    
+    // MARK: Private Variables
     
     private let animationView = AnimationView()
     private let starterText = UILabel()
     private let getStartedBtn = UIButton()
     private var locationService: LocationService?
+    
+    // MARK: View Controller Life Cycle Methods
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,14 +33,9 @@ public class SelectionViewController: UIViewController, LocationServiceDelegate 
         
     }
     
-    private func checkLocationServices() {
-        let locationManager = CLLocationManager()
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationService = LocationService(locationManager: locationManager)
-        locationService?.setupLocationServices()
-        locationService?.delegate = self
-    }
+    // MARK: UI Methods
     
+    ///Setup the navigation title and label that prompts the user to take the quiz
     private func configureText() {
         title = "Budtender"
         view.backgroundColor = UIColor(red: 92/255, green: 197/255, blue: 243/255, alpha: 1.0)
@@ -55,6 +55,7 @@ public class SelectionViewController: UIViewController, LocationServiceDelegate 
         
     }
     
+    ///Setup a map animation with the help of the lottie framework
     private func setupAnimation() {
         animationView.animation = Animation.named("map")
         view.addSubview(animationView)
@@ -76,6 +77,7 @@ public class SelectionViewController: UIViewController, LocationServiceDelegate 
 
     }
     
+    ///Configure the constraints and layout of the button that will allow the user to move onto the quiz view controller
     private func configureButton() {
         getStartedBtn.layer.cornerRadius = 5
         getStartedBtn.setTitle("Take Quiz", for: .normal)
@@ -90,6 +92,26 @@ public class SelectionViewController: UIViewController, LocationServiceDelegate 
         }
     }
     
+    ///Call this function to present an alert controller to the user if they denied us from using their location
+    public func presentAlertController() {
+        let ac = UIAlertController(title: "WARNING:", message: "Budtender neeeds access to your location in order to deliver a satisfying experience. Please change your settings to grant us access to your location.", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .cancel))
+        present(ac, animated: true)
+    }
+    
+    // MARK: Location Services Methods
+    
+    private func checkLocationServices() {
+        let locationManager = CLLocationManager()
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationService = LocationService(locationManager: locationManager)
+        locationService?.setupLocationServices()
+        locationService?.delegate = self
+    }
+    
+    // MARK: Objective-C Methods
+    
+    ///Move on to the quiz view controller as soon as this button is tapped
     @objc func takeQuiz(sender: UIButton!) {
         locationService?.delegate = nil
         sender.pulsate()
@@ -98,15 +120,12 @@ public class SelectionViewController: UIViewController, LocationServiceDelegate 
 
     }
     
-    public func presentAlertController() {
-        let ac = UIAlertController(title: "WARNING:", message: "Budtender neeeds access to your location in order to deliver a satisfying experience. Please change your settings to grant us access to your location.", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .cancel))
-        present(ac, animated: true)
-    }
+    // MARK: Delegation Methods
     
     public func queryDispensaries() {}
     
     public func notifyStatus(status: CLAuthorizationStatus) {
+        ///If the user has denied us from using their location, don't allow them to take the quiz until they change their privacy settings
         if(status == .denied) {
             presentAlertController()
             getStartedBtn.isEnabled = false
