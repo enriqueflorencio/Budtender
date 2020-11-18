@@ -62,8 +62,8 @@ public class ResultCollectionViewCell: UICollectionViewCell {
         budimageView.contentMode = .scaleAspectFit
         addSubview(budimageView)
         budimageView.snp.makeConstraints { (make) in
-            make.width.equalTo(145)
-            make.height.equalTo(120)
+            make.width.equalTo(snp.width)
+            make.height.equalTo(snp.height).multipliedBy(0.7)
             make.top.equalTo(snp.top)
             make.left.equalTo(snp.left)
             make.right.equalTo(snp.right)
@@ -80,7 +80,7 @@ public class ResultCollectionViewCell: UICollectionViewCell {
     
     ///Each cell is going to make network requests in order to fetch UI Images from the weedmaps API.
     private func configureImageView() {
-        DispatchQueue.global(qos: .background).async { [weak self] in
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let url = URL(string: (self?.imageURL!)!) else {
                 return
             }

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -17,23 +18,23 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="potion" translatesAutoresizingMaskIntoConstraints="NO" id="Cwz-bF-TgS">
-                                <rect key="frame" x="95" y="373" width="225" height="150"/>
+                                <rect key="frame" x="143" y="364" width="128" height="128"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Budtender" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oJT-oy-J0f">
-                                <rect key="frame" x="145" y="541" width="125" height="33"/>
+                                <rect key="frame" x="136.5" y="507" width="141" height="36"/>
                                 <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="30"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstItem="oJT-oy-J0f" firstAttribute="top" secondItem="Cwz-bF-TgS" secondAttribute="bottom" constant="18" id="0Zj-Sg-en4"/>
-                            <constraint firstItem="Cwz-bF-TgS" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="6ok-Am-ySb"/>
-                            <constraint firstItem="oJT-oy-J0f" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="GCs-31-jwk"/>
-                            <constraint firstItem="Cwz-bF-TgS" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="o7b-c1-JRD"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="oJT-oy-J0f" firstAttribute="top" secondItem="Cwz-bF-TgS" secondAttribute="bottom" constant="18" id="0Zj-Sg-en4" userLabel="Budtender.top = potion.bottom + 15"/>
+                            <constraint firstItem="Cwz-bF-TgS" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="6ok-Am-ySb" userLabel="potion.centerY = Safe Area.centerY - 25"/>
+                            <constraint firstItem="oJT-oy-J0f" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="GCs-31-jwk" userLabel="Budtender.centerX = centerX"/>
+                            <constraint firstItem="Cwz-bF-TgS" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="o7b-c1-JRD" userLabel="potion.centerX = centerX"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -43,5 +44,8 @@
     </scenes>
     <resources>
         <image name="potion" width="225" height="225"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

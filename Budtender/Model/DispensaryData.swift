@@ -15,10 +15,10 @@ public struct Dispensary: Codable {
 
 ///Each listing will have an array of dispensaries with their names, addresses, and coordinates
 public struct listings: Codable {
-    public var listings: [slugs]
+    public var listings: [slugInfo]
 }
 
-public struct slugs: Codable {
+public struct slugInfo: Codable {
     ///A dispensary's name
     public var slug: String?
     ///A dispensary's coordinates
