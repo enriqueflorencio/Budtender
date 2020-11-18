@@ -40,7 +40,7 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureTitle()
+        configureView()
         configureButtons()
         configureCollectionView()
     }
@@ -51,8 +51,8 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
     
     // MARK: UI Methods
     
-    private func configureTitle() {
-        title = "Home"
+    private func configureView() {
+        navigationController?.isNavigationBarHidden = true
     }
     
     ///This method configures the buttons on the bottom of the view controller that allow a user to move between questions.
@@ -73,18 +73,19 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.itemSize = CGSize(width: view.frame.width, height: view.frame.height)
-        layout.estimatedItemSize = .zero
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 1
-        layout.minimumInteritemSpacing = 1
         
         quizCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height), collectionViewLayout: layout)
         quizCollectionView.delegate = self
         quizCollectionView.dataSource = self
         quizCollectionView.register(QuizCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        ///Don't want to present the scroll bar when swiping
         quizCollectionView.showsHorizontalScrollIndicator = false
+        ///Prevents autolayout from conflicting with programmatic constraints
         quizCollectionView.translatesAutoresizingMaskIntoConstraints = false
         quizCollectionView.backgroundColor = UIColor(red: 92/255, green: 197/255, blue: 243/255, alpha: 1.0)
+        ///This stops the sliding motion of swiping. This allows the user to swipe at one "page" or "view" at a time
         quizCollectionView.isPagingEnabled = true
         view.addSubview(quizCollectionView)
         setupQuestions()
@@ -94,7 +95,7 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
     ///This method constrains our buttons and collection view to the user's screen
     private func setupViews() {
         quizCollectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.top.equalTo(view.snp.top)
             make.left.equalTo(view.snp.left)
             make.right.equalTo(view.snp.right)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
@@ -121,32 +122,28 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
     ///This method acts as a helper to allow the user to navigate around the collection view
     private func moveToFrame(_ contentOffset: CGFloat) {
         let frame: CGRect = CGRect(x: contentOffset, y: self.quizCollectionView.contentOffset.y, width: self.quizCollectionView.frame.width, height: self.quizCollectionView.frame.height)
-        print(self.quizCollectionView.frame.height)
         self.quizCollectionView.scrollRectToVisible(frame, animated: true)
     }
     
     ///This method sets up our questions into an array with their respected weedmaps tags
     private func setupQuestions() {
-        let question1 = Question(questionText: "Are you interested in feeling more energetic?", weedmapsTag: "Energetic", isAnswered: false, buttonTag: nil)
-        let question2 = Question(questionText: "Are you looking to be more creative?", weedmapsTag: "Creative", isAnswered: false, buttonTag: nil)
-        let question3 = Question(questionText: "Are you looking for something that will help uplift your mood?", weedmapsTag: "Uplifted", isAnswered: false, buttonTag: nil)
-        let question4 = Question(questionText: "Are you interested in being more talkative or open?", weedmapsTag: "Earthy", isAnswered: false, buttonTag: nil)
-        let question5 = Question(questionText: "Would you like to be more relaxed?", weedmapsTag: "Relaxed", isAnswered: false, buttonTag: nil)
-        let question6 = Question(questionText: "Do you desire to feel euphoric?", weedmapsTag: "Euphoric", isAnswered: false, buttonTag: nil)
-        let question7 = Question(questionText: "Are you looking for something that will help you have a good night's rest?", weedmapsTag: "Sleepy", isAnswered: false, buttonTag: nil)
-        let question8 = Question(questionText: "Would you like to be more giggly or amused?", weedmapsTag: "Giggly", isAnswered: false, buttonTag: nil)
+        let question1 = Question(questionText: QuizQuestions.firstQuestion.localized, weedmapsTag: WeedmapsTags.tagOne.localized, isAnswered: false, buttonTag: nil)
+        let question2 = Question(questionText: QuizQuestions.secondQuestion.localized, weedmapsTag: WeedmapsTags.tagTwo.localized, isAnswered: false, buttonTag: nil)
+        let question3 = Question(questionText: QuizQuestions.thirdQuestion.localized, weedmapsTag: WeedmapsTags.tagThree.localized, isAnswered: false, buttonTag: nil)
+        let question4 = Question(questionText: QuizQuestions.fourthQuestion.localized, weedmapsTag: WeedmapsTags.tagFour.localized, isAnswered: false, buttonTag: nil)
+        let question5 = Question(questionText: QuizQuestions.fifthQuestion.localized, weedmapsTag: WeedmapsTags.tagFive.localized, isAnswered: false, buttonTag: nil)
+        let question6 = Question(questionText: QuizQuestions.sixthQuestion.localized, weedmapsTag: WeedmapsTags.tagSix.localized, isAnswered: false, buttonTag: nil)
+        let question7 = Question(questionText: QuizQuestions.seventhQuestion.localized, weedmapsTag: WeedmapsTags.tagSeven.localized, isAnswered: false, buttonTag: nil)
+        let question8 = Question(questionText: QuizQuestions.eighthQuestion.localized, weedmapsTag: WeedmapsTags.tagEight.localized, isAnswered: false, buttonTag: nil)
         
         questionsArray = [question1, question2, question3, question4, question5, question6, question7, question8]
     }
-    
-    
     
     // MARK: Quiz Cell Delegation Methods
     
     public func didChooseAnswer(buttonIndex: Int) {
         let centerindex = getCenterIndex()
         guard let index = centerindex else {
-            
             return
         }
         
@@ -162,14 +159,27 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
         
     }
     
+    public func changeAnswer(buttonIndex: Int) {
+        let centerindex = getCenterIndex()
+        guard let index = centerindex else {
+            return
+        }
+        
+        if(buttonIndex == 1) {
+            userTags.removeAll { $0 == questionsArray[index.item].weedmapsTag }
+        } else {
+            userTags.append(questionsArray[index.item].weedmapsTag)
+        }
+    }
+    
     private func getCenterIndex() -> IndexPath? {
+        ///Take the center of the view controllers space itself and converting it to the space of the view I'm interested in which in this case is the collection view
         let center = self.view.convert(self.quizCollectionView.center, to: self.quizCollectionView)
         let index = quizCollectionView.indexPathForItem(at: center)
         return index
     }
     
-    // MARK: Collection View Delegation Methods
-    
+    // MARK: Collection View Data Source Methods
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return questionsArray.count
     }
@@ -196,11 +206,10 @@ public class QuizViewController: UIViewController, UICollectionViewDelegate, UIC
         sender.pulsate()
         
         if(currentQuestionNumber == questionsArray.count) {
-            
             locationService?.delegate = nil
             let resultViewController = ResultViewController(locationService: locationService, userTags: userTags)
             navigationController?.pushViewController(resultViewController, animated: true)
-            
+
             return
         }
         var contentOffset = CGFloat(floor(self.quizCollectionView.contentOffset.x + self.quizCollectionView.bounds.size.width))

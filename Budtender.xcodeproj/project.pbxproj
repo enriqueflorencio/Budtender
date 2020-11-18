@@ -14,6 +14,10 @@
 		CF3192BE24E5E0640082F9FA /* SelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF3192BD24E5E0640082F9FA /* SelectionViewController.swift */; };
 		CF6E28C9250A084F001C7D54 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6E28C8250A084F001C7D54 /* UIImage+Extensions.swift */; };
 		CF6E28CB250DFECB001C7D54 /* map.json in Resources */ = {isa = PBXBuildFile; fileRef = CF6E28CA250DFE37001C7D54 /* map.json */; };
+		CF7405D5255A0FA900FBEE69 /* QuizQuestions.strings in Resources */ = {isa = PBXBuildFile; fileRef = CF7405D4255A0FA900FBEE69 /* QuizQuestions.strings */; };
+		CF7405D8255A101300FBEE69 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF7405D7255A101300FBEE69 /* Strings.swift */; };
+		CF7405E0255A110100FBEE69 /* Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF7405DF255A110100FBEE69 /* Localizable.swift */; };
+		CF740607255B533D00FBEE69 /* WeedmapsTags.strings in Resources */ = {isa = PBXBuildFile; fileRef = CF740606255B533D00FBEE69 /* WeedmapsTags.strings */; };
 		CF74EF7B25042293003D5896 /* Herb.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF74EF7A25042293003D5896 /* Herb.swift */; };
 		CF74EF7D25058CC3003D5896 /* DispensaryMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF74EF7C25058CC3003D5896 /* DispensaryMap.swift */; };
 		CF74EF7F2507010A003D5896 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF74EF7E2507010A003D5896 /* SceneDelegate.swift */; };
@@ -40,6 +44,10 @@
 		CF3192BD24E5E0640082F9FA /* SelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionViewController.swift; sourceTree = "<group>"; };
 		CF6E28C8250A084F001C7D54 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		CF6E28CA250DFE37001C7D54 /* map.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = map.json; sourceTree = "<group>"; };
+		CF7405D4255A0FA900FBEE69 /* QuizQuestions.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = QuizQuestions.strings; sourceTree = "<group>"; };
+		CF7405D7255A101300FBEE69 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
+		CF7405DF255A110100FBEE69 /* Localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localizable.swift; sourceTree = "<group>"; };
+		CF740606255B533D00FBEE69 /* WeedmapsTags.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = WeedmapsTags.strings; sourceTree = "<group>"; };
 		CF74EF7A25042293003D5896 /* Herb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Herb.swift; sourceTree = "<group>"; };
 		CF74EF7C25058CC3003D5896 /* DispensaryMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispensaryMap.swift; sourceTree = "<group>"; };
 		CF74EF7E2507010A003D5896 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -106,6 +114,7 @@
 		CF2C50D124E5D1C400A41AEE /* Budtender */ = {
 			isa = PBXGroup;
 			children = (
+				CF7405D3255A0F7D00FBEE69 /* PageStrings */,
 				CF866A7E24FDC1BE00C7C223 /* UIFoundation */,
 				CF866A7424F480CE00C7C223 /* Manager */,
 				CF2C50E624E5D1E400A41AEE /* Model */,
@@ -150,6 +159,17 @@
 				CF2C50E724E5D1F800A41AEE /* Controller */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		CF7405D3255A0F7D00FBEE69 /* PageStrings */ = {
+			isa = PBXGroup;
+			children = (
+				CF7405D4255A0FA900FBEE69 /* QuizQuestions.strings */,
+				CF740606255B533D00FBEE69 /* WeedmapsTags.strings */,
+				CF7405D7255A101300FBEE69 /* Strings.swift */,
+				CF7405DF255A110100FBEE69 /* Localizable.swift */,
+			);
+			path = PageStrings;
 			sourceTree = "<group>";
 		};
 		CF866A7424F480CE00C7C223 /* Manager */ = {
@@ -240,6 +260,8 @@
 			files = (
 				CF2C50DF24E5D1C700A41AEE /* LaunchScreen.storyboard in Resources */,
 				CF2C50DC24E5D1C700A41AEE /* Assets.xcassets in Resources */,
+				CF740607255B533D00FBEE69 /* WeedmapsTags.strings in Resources */,
+				CF7405D5255A0FA900FBEE69 /* QuizQuestions.strings in Resources */,
 				CF6E28CB250DFECB001C7D54 /* map.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -305,9 +327,11 @@
 				CF942EDC24E77D08001E16D4 /* MenuData.swift in Sources */,
 				CF942EE324ECBA80001E16D4 /* QuizCollectionViewCell.swift in Sources */,
 				CF942ED224E75DD8001E16D4 /* QuizViewController.swift in Sources */,
+				CF7405D8255A101300FBEE69 /* Strings.swift in Sources */,
 				CF866A6F24F0965B00C7C223 /* ResultCollectionViewCell.swift in Sources */,
 				CF74EF7B25042293003D5896 /* Herb.swift in Sources */,
 				CF866A7124F09AC000C7C223 /* ResultViewController.swift in Sources */,
+				CF7405E0255A110100FBEE69 /* Localizable.swift in Sources */,
 				CF6E28C9250A084F001C7D54 /* UIImage+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

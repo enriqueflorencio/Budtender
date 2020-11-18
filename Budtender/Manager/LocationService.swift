@@ -60,34 +60,6 @@ public class LocationService: NSObject, CLLocationManagerDelegate {
         
     }
     
-    // MARK: User Permission/Status Functions
-    
-    ///Get the current status of the user's permission
-    public func getStatus() -> CLAuthorizationStatus? {
-        guard let userStatus = self.status else {
-            return nil
-        }
-        return userStatus
-    }
-    
-    ///We can determine a user's status by using a switch case
-    public func checkLocationAuthorization() {
-        switch self.status {
-        case .authorizedWhenInUse:
-            print("WHEN IN USE")
-        case .authorizedAlways:
-            print("ALWAYS")
-        case .denied:
-            print("DENIED")
-        case .notDetermined:
-            print("NOT DETERMINED")
-        case .restricted:
-            print("RESTRICTED")
-        @unknown default:
-            print("UNKNOWN")
-        }
-    }
-    
     // MARK: Calculations
     
     ///This will calculate a user's bounding box which will be used inside the weedmaps API
@@ -106,7 +78,7 @@ public class LocationService: NSObject, CLLocationManagerDelegate {
 
     }
     
-    // MARK: Bounding Box Coordinates
+    // MARK: Bounding Box Coordinates (Getter's)
     
     public func getBottomLongitude() -> Double? {
         guard let bottomLong = bottomLongitude else {
@@ -149,6 +121,7 @@ public class LocationService: NSObject, CLLocationManagerDelegate {
     
     ///We need to update our coordinate variable with the user's current location and we need to setup the bounding box in this function.
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
         guard let latestLocation = locations.first else {
             return
         }

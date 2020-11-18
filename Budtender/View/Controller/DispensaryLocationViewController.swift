@@ -17,6 +17,7 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
     
     private var locationService: LocationService?
     private let strain: String
+    private var userTags: [String]
     private let dispensary: String
     private let tags: [String]
     private let address: String
@@ -31,7 +32,8 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
     
     // MARK: Constructor Methods
     
-    public init(locationService: LocationService?, strain: String, dispensary: String, tags: [String], address: String, dispensaryLatitude: Double, dispensaryLongitude: Double, productURL: String) {
+    public init(userTags: [String] ,locationService: LocationService?, strain: String, dispensary: String, tags: [String], address: String, dispensaryLatitude: Double, dispensaryLongitude: Double, productURL: String) {
+        self.userTags = userTags
         self.locationService = locationService
         self.strain = strain
         self.dispensary = dispensary
@@ -60,7 +62,8 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
     // MARK: UI Methods
     
     private func configureView() {
-        title = strain
+        navigationController?.isNavigationBarHidden = false
+        title = "Product Information"
         view.backgroundColor = UIColor.white
     }
     
@@ -75,16 +78,16 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         strainView.contentMode = .scaleAspectFit
         view.addSubview(strainView)
         strainView.snp.makeConstraints { (make) in
-            make.width.equalTo(145)
-            make.height.equalTo(120)
-            make.top.equalTo(view.snp.topMargin).inset(10)
+            make.width.equalTo(view.snp.width).multipliedBy(0.35)
+            make.height.equalTo(view.snp.height).multipliedBy(0.2)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin).inset(10)
             make.left.equalTo(view.snp.left).inset(10)
         }
         
     }
     
     private func configureLabels() {
-        strainLabel.text = "Product: \(strain)"
+        strainLabel.text = "\(strain)"
         strainLabel.layer.borderColor = UIColor(white: 0, alpha: 0.3).cgColor
         strainLabel.layer.borderWidth = 2
         strainLabel.numberOfLines = 3
@@ -94,21 +97,18 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         strainLabel.textAlignment = .center
         view.addSubview(strainLabel)
         strainLabel.snp.makeConstraints { (make) in
-            make.width.equalTo(200)
-            make.height.equalTo(70)
-            make.top.equalTo(strainView.snp.top).inset(27)
+            make.width.equalTo(view.snp.width).multipliedBy(0.58)
+            make.height.equalTo(view.snp.height).multipliedBy(0.1)
+            make.top.equalTo(strainView.snp.top).inset(28)
             make.left.equalTo(strainView.snp.right).offset(10)
             make.right.equalTo(view.snp.right).inset(10)
         }
         tagsLabel.text = "Tags: "
-        var cntr = 0
+        
         for tag in tags {
-            if(cntr == tags.capacity - 1) {
-                tagsLabel.text! += "\(tag)"
-            } else {
+            if(userTags.contains(tag)) {
                 tagsLabel.text! += "\(tag), "
             }
-            cntr += 1
         }
         
         tagsLabel.layer.borderColor = UIColor(white: 0, alpha: 0.3).cgColor
@@ -120,11 +120,10 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         tagsLabel.textAlignment = .center
         view.addSubview(tagsLabel)
         tagsLabel.snp.makeConstraints { (make) in
-            make.width.equalTo(300)
-            make.height.equalTo(80)
+            make.width.equalTo(view.snp.width).multipliedBy(0.95)
+            make.height.equalTo(view.snp.height).multipliedBy(0.1)
             make.top.equalTo(strainView.snp.bottom).offset(20)
-            make.left.equalTo(view.snp.left).inset(10)
-            make.right.equalTo(view.snp.right).inset(10)
+            make.centerX.equalTo(view.snp.centerX)
         }
         dispensaryLabel.text = "Dispensary Name: "
         dispensaryLabel.text! += dispensary
@@ -139,11 +138,10 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         dispensaryLabel.textAlignment = .center
         view.addSubview(dispensaryLabel)
         dispensaryLabel.snp.makeConstraints { (make) in
-            make.width.equalTo(300)
-            make.height.equalTo(90)
+            make.width.equalTo(view.snp.width).multipliedBy(0.95)
+            make.height.equalTo(view.snp.height).multipliedBy(0.1)
             make.top.equalTo(tagsLabel.snp.bottom).offset(15)
-            make.left.equalTo(view.snp.left).inset(10)
-            make.right.equalTo(view.snp.right).inset(10)
+            make.centerX.equalTo(view.snp.centerX)
         }
     }
     
@@ -158,9 +156,8 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         mapView.snp.makeConstraints { (make) in
             make.width.equalTo(view.snp.width).multipliedBy(0.95)
             make.height.equalTo(view.snp.height).multipliedBy(0.35)
-            make.left.equalTo(view.snp.left).inset(10)
-            make.right.equalTo(view.snp.right).inset(10)
-            make.bottom.equalTo(view.snp.bottomMargin).inset(5)
+            make.centerX.equalTo(view.snp.centerX)
+            make.top.equalTo(dispensaryLabel.snp.bottom).offset(15)
             
         }
         addDispensaryCoordinates()
@@ -168,7 +165,7 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
     }
     
     private func fetchImageView() {
-        DispatchQueue.global(qos: .background).async { [weak self] in
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             guard let url = URL(string: (self?.productURL)!) else {
                 return
             }
@@ -233,7 +230,7 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
     
     private func beginUpdatingLocation() {
         mapView.showsUserLocation = true
-        locationService?.locationManager.startUpdatingLocation()
+        //locationService?.locationManager.startUpdatingLocation()
     }
     
     private func zoomIn() {
@@ -248,7 +245,5 @@ public class DispensaryLocationViewController: UIViewController, MKMapViewDelega
         zoomRect = zoomRect.union(myLocationPointRect)
         mapView.setVisibleMapRect(zoomRect, animated: true)
     }
-    
-    
 
 }

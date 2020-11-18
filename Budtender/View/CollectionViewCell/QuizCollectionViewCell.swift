@@ -12,6 +12,7 @@ import SnapKit
 ///Protocol that our quiz view controller will have to conform to in order to handle button clicks
 public protocol QuizCellDelegate: class {
     func didChooseAnswer(buttonIndex: Int)
+    func changeAnswer(buttonIndex: Int)
 }
 
 ///Collection View Cell that will be used for each question in our quiz
@@ -82,28 +83,30 @@ public class QuizCollectionViewCell: UICollectionViewCell {
     private func configureViews() {
         addSubview(labelQuestion)
         labelQuestion.snp.makeConstraints { (make) in
-            make.top.equalTo(snp.top).offset(25)
+            make.top.equalTo(snp.top)
             make.centerX.equalTo(snp.centerX)
-            make.width.height.equalTo(150)
+            make.width.equalTo(snp.width).multipliedBy(0.55)
+            make.height.equalTo(snp.height).multipliedBy(0.25)
         }
         
         trueButton = getButton(0)
         addSubview(trueButton)
         trueButton.snp.makeConstraints { (make) in
-            make.top.equalTo(labelQuestion.snp.bottom).inset(20)
+            make.top.equalTo(labelQuestion.snp.bottom).inset(25)
+            make.width.equalTo(snp.width).multipliedBy(0.35)
+            make.height.equalTo(snp.height).multipliedBy(0.09)
             make.left.equalTo(snp.left).inset(30)
-            make.width.equalTo(150)
-            make.height.equalTo(50)
+            
         }
         trueButton.addTarget(self, action: #selector(buttonOptionAction), for: .touchUpInside)
         buttonsArray.append(trueButton)
         falseButton = getButton(1)
         addSubview(falseButton)
         falseButton.snp.makeConstraints { (make) in
-            make.top.equalTo(trueButton.snp.top)
+            make.top.equalTo(labelQuestion.snp.bottom).inset(25)
+            make.width.equalTo(snp.width).multipliedBy(0.35)
+            make.height.equalTo(snp.height).multipliedBy(0.09)
             make.right.equalTo(snp.right).inset(30)
-            make.width.equalTo(150)
-            make.height.equalTo(50)
         }
         falseButton.addTarget(self, action: #selector(buttonOptionAction), for: .touchUpInside)
         buttonsArray.append(falseButton)
@@ -138,6 +141,21 @@ public class QuizCollectionViewCell: UICollectionViewCell {
         ///If the question hasn't been answered yet then the quiz view controller will handle it accordingly
         if(!unwrappedQuestion.isAnswered) {
             delegate?.didChooseAnswer(buttonIndex: sender.tag)
+        } else {
+            if(!(sender.tag == unwrappedQuestion.buttonTag!)) {
+                if(unwrappedQuestion.buttonTag! == 0) {
+                    question?.buttonTag = 1
+                } else {
+                    question?.buttonTag = 0
+                }
+                
+                buttonsArray[unwrappedQuestion.buttonTag!].backgroundColor = UIColor.white
+                buttonsArray[(question?.buttonTag)!].backgroundColor = UIColor.yellow
+                print("sender: \(sender.tag)")
+                delegate?.changeAnswer(buttonIndex: sender.tag)
+            }
+            
+            
         }
     }
     
